@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Note;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class WordNoteController extends Controller
 {
@@ -13,7 +15,8 @@ class WordNoteController extends Controller
      */
     public function index()
     {
-        //
+        $notes = Note::latest()->get();
+        return Inertia::render('Notes/NoteList', ['notes' => $notes]);
     }
 
     /**
