@@ -23,6 +23,7 @@
                         </button>
                     </div>
 
+
                 </div>
             </div>
         </div>
@@ -31,8 +32,8 @@
                 <input
                     type="text"
                     name="name"
-                    placeholder="단어장 이름"
-                    required
+                    v-model="title"
+                    placeholder="단어장"
                     class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
                     />
             </template>
@@ -46,13 +47,13 @@
                     </thead>
                     <tbody>
                         <tr v-for="i in wordsCount" :key="i">
-                            <th><input type="text" class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"></th>
-                            <th><input type="text" class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"></th>
+                            <th><input type="text" v-model="languages[i-1]" class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"></th>
+                            <th><input type="text" v-model="means[i-1]" class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"></th>
                         </tr>
                     </tbody>
                 </table>
                 <div class="text-right">
-                    <button @click="this.wordsCount+=1" class="p-0 w-10 h-10 bg-red-600 rounded-full hover:bg-red-700 active:shadow-lg mouse shadow transition ease-in duration-200 focus:outline-none">
+                    <button @click="count" class="p-0 w-10 h-10 bg-red-600 rounded-full hover:bg-red-700 active:shadow-lg mouse shadow transition ease-in duration-200 focus:outline-none">
                         <svg viewBox="0 0 20 20" enable-background="new 0 0 20 20" class="w-6 h-6 inline-block">
                             <path fill="#FFFFFF" d="M16,10c0,0.553-0.048,1-0.601,1H11v4.399C11,15.951,10.553,16,10,16c-0.553,0-1-0.049-1-0.601V11H4.601
                                                     C4.049,11,4,10.553,4,10c0-0.553,0.049-1,0.601-1H9V4.601C9,4.048,9.447,4,10,4c0.553,0,1,0.048,1,0.601V9h4.399
@@ -63,8 +64,8 @@
 
             </template>
             <template #footer>
-                <button class="bg-blue-500">저장</button>
-                <button @click="createNote = false" class="bg-blue-500">취소</button>
+                <button @click="submit(languages, means)" class="bg-blue-500">저장</button>
+                <button @click="createNote = false; this.wordsCount=1" class="bg-blue-500">취소</button>
             </template>
 
         </jet-dialog-modal>
@@ -75,6 +76,7 @@
     import { defineComponent } from 'vue'
     import AppLayout from '@/Layouts/AppLayout.vue'
     import JetDialogModal from '@/JetStream/DialogModal.vue'
+    import axios from 'axios'
 
     export default defineComponent({
         props: ['notes'],
@@ -87,12 +89,63 @@
             return {
                 createNote : false,
                 wordsCount : 1,
+                saveNoteId : null,
+                title:'',
+                languages: [],
+                means:[],
+
 
             }
         },
         methods: {
+            count() {
+                this.wordsCount += 1
+                console.log(this.wordsCount);
+            },
             open_create_modal() {
                 this.createNote = true;
+            },
+            submit(languages, means) {
+                console.log(this.wordsCount);
+                const counts = this.wordsCount;
+                // this.$inertia.post('/notes/store', this.form);
+                axios.post('/notes/store', {
+                    'title' : this.title})
+                .then(response => {
+                    this.saveNoteId = response.data;
+                    console.log(this.saveNoteId);
+
+                    for(let i=0; i< counts; i++ ){
+                        console.log('dddd');
+                        console.log(this.saveNoteId + ' ' + languages[i] + ' ' +  means[i]);
+                        axios.post('/words/store', {
+                            'language' : languages[i],
+                            'mean' : means[i],
+                            'note_id' : this.saveNoteId
+                        })
+                        .then(response => {
+                            console.log('success');
+                        })
+                        .catch(error => {
+                            console.log('error');
+                        })
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+
+
+
+
+                this.title = ''
+                this.languages = [];
+                this.means = [];
+                this.wordsCount = 1;
+                // this.form = null
+                this.createNote = false;
+
+
             }
         },
     })

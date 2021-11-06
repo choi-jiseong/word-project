@@ -17,7 +17,6 @@ class CreateWordsTable extends Migration
             $table->id();
             $table->string('language');
             $table->string('mean');
-            $table->mediumText('explanation');
             $table->foreignId('note_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });

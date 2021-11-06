@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Note;
+use App\Models\Word;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class WordNoteController extends Controller
@@ -37,7 +39,22 @@ class WordNoteController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // dd($request);
+        $note = Note::create(['title' => $request->title]);
+        // dd($note);
+        // return Redirect::route('notes.index');
+
+        return $note->id;
+
+    }
+
+    public function wordStore(Request $request)
+    {
+        // dd($request);
+
+        Word::create(['language' => $request->language, 'mean' => $request->mean, 'note_id' => $request->note_id]);
+
+        return Redirect::route('notes.index');
     }
 
     /**
