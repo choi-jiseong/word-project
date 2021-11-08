@@ -2,7 +2,7 @@
     <app-layout title="Dashboard">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                ノート
+                MY ノート
             </h2>
             <h3>
                 프로필 넣기(단어장 수 등)
@@ -27,7 +27,7 @@
                             <div class="p-4 flex flex-col">
                                 <h3 class="text-2xl">{{ note.title }}</h3>
                                 <p class="my-4">{{ note.created_at }}</p>
-                                <Link :href="'/notes/show/'+note.id" method="get"><button value="button" class="hover:text-white hover:bg-green-400 bg-gray-800 text-gray-400 m-auto my-4 px-6 py-2 text-lg rounded shadow-px-4 border-0">click</button></Link>
+                                <button type="button" value="button" class="hover:text-white hover:bg-green-400 bg-gray-800 text-gray-400 m-auto my-4 px-6 py-2 text-lg rounded shadow-px-4 border-0">click</button>
                             </div>
                         </div>
                     </div>
@@ -44,10 +44,6 @@
                     placeholder="단어장"
                     class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
                     />
-                <select class="float-right" v-model="pubpriv">
-                    <option :value="false">비공개</option>
-                    <option :value="true">공개</option>
-                </select>
             </template>
             <template #content>
                 <table class="w-full mb-3">
@@ -109,7 +105,6 @@
                 title:'',
                 languages: [],
                 means:[],
-                pubpriv : false,
                 form : {
                     language : '',
                     mean : '',
@@ -130,12 +125,9 @@
             },
             submit(languages, means) {
                 console.log(this.wordsCount);
-                console.log(this.pubpriv);
                 const counts = this.wordsCount;
                 axios.post('/notes/store', {
-                    'title' : this.title,
-                    'pubpriv' : this.pubpriv,
-                    })
+                    'title' : this.title})
                 .then(response => {
                     this.form.note_id = response.data;
                     console.log(this.form.note_id);
@@ -158,7 +150,6 @@
                 this.form.note_id = null;
                 this.form.language = '',
                 this.form.mean = '',
-                this.pubpriv = false;
                 this.wordsCount = 1;
                 this.createNote = false;
 

@@ -8,5 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Note extends Model
 {
     use HasFactory;
-    protected $fillable = ['title'];
+    protected $fillable = ['title', 'user_id', 'pubpriv'];
+
+    protected $with = ['words'];
+
+    public function words() {
+        return $this->hasMany(Word::class);
+    }
 }

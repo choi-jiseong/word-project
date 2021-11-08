@@ -17,8 +17,14 @@ class WordNoteController extends Controller
      */
     public function index()
     {
-        $notes = Note::latest()->get();
+        $notes = Note::latest()->where('pubpriv', true)->paginate(10);
         return Inertia::render('Notes/NoteList', ['notes' => $notes]);
+    }
+
+    public function myIndex()
+    {
+        $notes = Note::latest()->where('user_id', auth()->user()->id)->paginate(10);
+        return Inertia::render('Notes/MyNoteList', ['notes' => $notes]);
     }
 
     /**
@@ -40,7 +46,7 @@ class WordNoteController extends Controller
     public function store(Request $request)
     {
         // dd($request);
-        $note = Note::create(['title' => $request->title]);
+        $note = Note::create(['title' => $request->title, 'user_id' => auth()->user()->id, 'pubpriv' => $request->pubpriv]);
         // dd($note);
         // return Redirect::route('notes.index');
 
@@ -65,7 +71,9 @@ class WordNoteController extends Controller
      */
     public function show($id)
     {
-        //
+        $note = Note::find($id);
+
+        return Inertia::render('Notes/ShowNote', ['note' => $note]);
     }
 
     /**

@@ -9,4 +9,8 @@ class Word extends Model
 {
     use HasFactory;
     protected $fillable = ['language', 'mean', 'note_id'];
+
+    public function notes() {
+        return $this->belongsTo(Note::class);
+    }
 }

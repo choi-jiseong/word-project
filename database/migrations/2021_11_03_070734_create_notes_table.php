@@ -15,7 +15,9 @@ class CreateNotesTable extends Migration
     {
         Schema::create('notes', function (Blueprint $table) {
             $table->id();
-            $table->string('title')->default(date('m/d').' 단어장');
+            $table->string('title')->default();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->boolean('pubpriv');
             $table->timestamps();
         });
     }
