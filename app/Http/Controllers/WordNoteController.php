@@ -71,7 +71,15 @@ class WordNoteController extends Controller
      */
     public function show($id)
     {
+
+
         $note = Note::find($id);
+
+        if($note->pubpriv == false) {
+            if (auth()->user()->id != $note->user_id) {
+                abort(403);
+            }
+        }
 
         return Inertia::render('Notes/ShowNote', ['note' => $note]);
     }
