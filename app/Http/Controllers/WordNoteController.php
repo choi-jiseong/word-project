@@ -17,13 +17,13 @@ class WordNoteController extends Controller
      */
     public function index()
     {
-        $notes = Note::latest()->where('pubpriv', true)->paginate(10);
+        $notes = Note::latest()->where('pubpriv', true)->paginate(8);
         return Inertia::render('Notes/NoteList', ['notes' => $notes]);
     }
 
     public function myIndex()
     {
-        $notes = Note::latest()->where('user_id', auth()->user()->id)->paginate(10);
+        $notes = Note::latest()->where('user_id', auth()->user()->id)->paginate(8);
         return Inertia::render('Notes/MyNoteList', ['notes' => $notes]);
     }
 
@@ -46,6 +46,7 @@ class WordNoteController extends Controller
     public function store(Request $request)
     {
         // dd($request);
+        // $request->validate(['title' => 'required']);
         $note = Note::create(['title' => $request->title, 'user_id' => auth()->user()->id, 'pubpriv' => $request->pubpriv]);
         // dd($note);
         // return Redirect::route('notes.index');
@@ -57,10 +58,15 @@ class WordNoteController extends Controller
     public function wordStore(Request $request)
     {
         // dd($request);
-
+        // $request->validate(['language' => 'required', 'mean' => 'required']);
         Word::create(['language' => $request->language, 'mean' => $request->mean, 'note_id' => $request->note_id]);
 
-        return Redirect::route('notes.index');
+        if($request->currentBol) {
+            return Redirect::route('notes.show', ['noteId' => $request->note_id]);
+        }else{
+            return Redirect::route('notes.index');
+        }
+
     }
 
     /**
@@ -104,7 +110,26 @@ class WordNoteController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $note = Note::find($id);
+        $note->title = $request->title;
+        $note->pubpriv = $request->pubpriv;
+        $note->save();
+
+        return $note->id;
+    }
+
+    public function wordUpdate(Request $request, $id)
+    {
+        if($id == 99999999999999) {
+            Word::create(['language' =>$request->language, 'mean' => $request->mean]);
+        }else{
+            $word = Word::find($id);
+            $word->language = $request->language;
+            $word->mean = $request->mean;
+            $word->save();
+        }
+
+        return Redirect::route('notes.show', ['noteId' =>$word->note_id]);
     }
 
     /**
@@ -116,5 +141,13 @@ class WordNoteController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function wordDestroy($id) {
+        $word = Word::find($id);
+        $noteId = $word->note_id;
+        $word->delete();
+
+        return Redirect::route('notes.show', ['noteId' =>$noteId]);
     }
 }

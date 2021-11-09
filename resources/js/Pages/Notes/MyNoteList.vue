@@ -114,6 +114,7 @@
                     language : '',
                     mean : '',
                     note_id : null,
+                    currentBol : false,
                 }
 
 
@@ -144,6 +145,9 @@
                         this.form.language = languages[i]
                         this.form.mean = means[i]
                         console.log(this.form.note_id + ' ' + this.form.language + ' ' +  this.form.mean);
+                        if(!this.form.language || !this.form.mean){
+                            return;
+                        }
                         this.$inertia.post('/words/store', this.form);
 
                     }

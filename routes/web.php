@@ -43,4 +43,8 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/words/store', [WordNoteC
 
 Route::middleware(['auth:sanctum', 'verified'])->patch('/notes/update/{noteId}', [WordNoteController::class, 'update'])->name('notes.update');
 
+Route::middleware(['auth:sanctum', 'verified'])->patch('/words/update/{wordId}', [WordNoteController::class, 'wordUpdate'])->name('words.update');
+
+Route::middleware(['auth:sanctum', 'verified'])->delete('/words/delete/{wordId}', [WordNoteController::class, 'wordDestroy'])->name('words.destroy');
+
 Route::middleware(['auth:sanctum', 'verified'])->delete('/notes/delete/{noteId}', [WordNoteController::class, 'destroy'])->name('notes.destroy');
