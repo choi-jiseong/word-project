@@ -140,7 +140,10 @@ class WordNoteController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $note = Note::find($id);
+        $note -> delete();
+
+        return Redirect::route('notes.index');
     }
 
     public function wordDestroy($id) {

@@ -4,9 +4,7 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 ノート
             </h2>
-            <h3>
-                프로필 넣기(단어장 수 등)
-            </h3>
+
         </template>
 
         <div class="py-12">
@@ -26,12 +24,14 @@
                     </div>
                     <div class="flex flex-wrap">
                         <div v-for="note in notes.data" :key="note.id"
-                            class="bg-white text-base w-1/5 rounded-lg shadow m-7 border border-t-8 border-b-8 border-black my-5 flex flex-col">
-                            <div class="p-4 flex flex-col">
-                                <h3 class="text-2xl">{{ note.title }}</h3>
-                                <p class="my-4">{{ note.created_at }}</p>
+                            class="bg-white text-base w-full rounded-lg shadow m-2 border border-3 border-black my-1 flex flex-col">
+                            <div class="p-2 flex flex-col text-right">
+                                <div class="flex justify-between">
+                                    <h3 class="text-xl overflow-ellipsis overflow-hidden">{{ note.title }}</h3>
+                                    <p class="my-1">{{ note.created_at }}</p>
+                                </div>
                                 <Link :href="'/notes/show/'+note.id" method="get"><button value="button"
-                                    class="hover:text-white hover:bg-green-400 bg-gray-800 text-gray-400 m-auto my-4 px-6 py-2 text-lg rounded shadow-px-4 border-0">click</button>
+                                    class="hover:text-white hover:bg-green-400 bg-gray-800 text-gray-400 m-auto my-2 px-6 py-2 text-lg rounded shadow-px-4 border-0">click</button>
                                 </Link>
                             </div>
                         </div>
@@ -121,7 +121,6 @@
             return {
                 createNote: false,
                 wordsCount: 1,
-                // saveNoteId : null,
                 title: '',
                 languages: [],
                 means: [],
@@ -132,9 +131,6 @@
                     note_id: null,
                     currentBol: false,
                 }
-
-
-
             }
         },
         methods: {
@@ -146,9 +142,7 @@
                 this.createNote = true;
             },
             submit(languages, means) {
-                console.log(this.wordsCount);
-                console.log(this.pubpriv);
-                // console.log($page.props.errors);
+
                 const counts = this.wordsCount;
                 axios.post('/notes/store', {
                         'title': this.title,
@@ -156,14 +150,10 @@
                     })
                     .then(response => {
                         this.form.note_id = response.data;
-                        console.log(this.form.note_id);
                         for (let i = 0; i < counts; i++) {
                             console.log('dddd');
                             this.form.language = languages[i]
                             this.form.mean = means[i]
-                            console.log(this.form.note_id + ' ' + this.form.language + ' ' + this.form
-                            .mean);
-                            console.log(this.form.currentBol);
                             // if(!this.form.language || !this.form.mean){
                             //     return;
                             // }
@@ -185,11 +175,8 @@
                     .catch(error => {
                         console.log(error);
                     });
+            },
 
-
-
-
-            }
         },
     })
 </script>

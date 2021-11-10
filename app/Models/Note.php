@@ -9,7 +9,9 @@ class Note extends Model
 {
     use HasFactory;
     protected $fillable = ['title', 'user_id', 'pubpriv'];
-
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d',
+    ];
     protected $with = ['words'];
 
     public function words() {
