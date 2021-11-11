@@ -58,4 +58,10 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    protected $with = ['notes'];
+
+    public function notes() {
+        return $this->hasMany(Note::class);
+    }
 }

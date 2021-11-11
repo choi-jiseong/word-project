@@ -26,7 +26,7 @@
                                     Notes
                                 </jet-nav-link>
                                 <jet-nav-link :href="route('notes.myIndex')" :active="route().current('notes.myIndex')">
-                                    MyNotes
+                                    My
                                 </jet-nav-link>
 
                             </div>
@@ -156,7 +156,7 @@
                             Notes
                         </jet-responsive-nav-link>
                         <jet-responsive-nav-link :href="route('notes.myIndex')" :active="route().current('notes.myIndex')">
-                            MyNotes
+                            My
                         </jet-responsive-nav-link>
                     </div>
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Note;
+use App\Models\User;
 use App\Models\Word;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -24,7 +25,7 @@ class WordNoteController extends Controller
     public function myIndex()
     {
         $notes = Note::latest()->where('user_id', auth()->user()->id)->paginate(8);
-        return Inertia::render('Notes/MyNoteList', ['notes' => $notes]);
+        return Inertia::render('Notes/MyProfile', ['notes' => $notes]);
     }
 
     /**
@@ -80,14 +81,14 @@ class WordNoteController extends Controller
 
 
         $note = Note::find($id);
-
+        $userName = User::find($note->user_id)->name;
         if($note->pubpriv == false) {
             if (auth()->user()->id != $note->user_id) {
                 abort(403);
             }
         }
 
-        return Inertia::render('Notes/ShowNote', ['note' => $note]);
+        return Inertia::render('Notes/ShowNote', ['note' => $note->load('user')]);
     }
 
     /**
@@ -120,14 +121,10 @@ class WordNoteController extends Controller
 
     public function wordUpdate(Request $request, $id)
     {
-        if($id == 99999999999999) {
-            Word::create(['language' =>$request->language, 'mean' => $request->mean]);
-        }else{
             $word = Word::find($id);
             $word->language = $request->language;
             $word->mean = $request->mean;
             $word->save();
-        }
 
         return Redirect::route('notes.show', ['noteId' =>$word->note_id]);
     }
@@ -151,6 +148,6 @@ class WordNoteController extends Controller
         $noteId = $word->note_id;
         $word->delete();
 
-        return Redirect::route('notes.show', ['noteId' =>$noteId]);
+        return Redirect::route('notes.show', ['noteId' =>$noteId]) ;
     }
 }
