@@ -42,14 +42,21 @@
         </div>
         <jet-dialog-modal :show="createNote">
             <template #title>
-                <input type="text" name="name" v-model="title" placeholder="단어장"
-                    class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200" />
                 <select class="float-right" v-model="pubpriv">
                     <option :value="false">비공개</option>
                     <option :value="true">공개</option>
                 </select>
+                <input type="text" name="name" v-model="title" placeholder="단어장"
+                    class="pt-3 pb-2 block w-4/5 px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200" />
+
             </template>
             <template #content>
+                <div class="my-3">
+                    <input class="pt-3 pb-2 px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200" type="text" v-model="wordShow">
+                    <button @click="searchWord">번역</button>
+                    <p> {{ this.wordShowResult }}</p>
+                </div>
+
                 <table class="w-full mb-3">
                     <thead>
                         <tr>
@@ -120,6 +127,7 @@
         data() {
             return {
                 createNote: false,
+                wordShowResult : '',
                 wordsCount: 1,
                 title: '',
                 languages: [],
@@ -130,10 +138,24 @@
                     mean: '',
                     note_id: null,
                     currentBol: false,
-                }
+                },
+                wordShow : '',
+
             }
         },
         methods: {
+            searchWord() {
+                console.log(this.wordShow);
+                axios.post('/translate/word', {
+                    'word' : this.wordShow
+                }).then(response=> {
+                    console.log(response.data);
+                    this.wordShowResult = response.data;
+                }).catch(error => {
+                    console.log(error);
+                });
+
+            },
             count() {
                 this.wordsCount += 1
                 console.log(this.wordsCount);

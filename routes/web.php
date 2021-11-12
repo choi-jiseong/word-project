@@ -31,7 +31,9 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/notes', [WordNoteController::class, 'index'])->name('notes.index');
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/myNotes', [WordNoteController::class, 'myIndex'])->name('notes.myIndex');
+Route::middleware(['auth:sanctum', 'verified'])->post('/translate/word', [WordNoteController::class, 'searchWord']);
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/my', [WordNoteController::class, 'myIndex'])->name('notes.myIndex');
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/notes/create', [WordNoteController::class, 'create'])->name('notes.create');
 
