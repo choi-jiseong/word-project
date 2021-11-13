@@ -27,6 +27,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'username',
     ];
 
     /**
@@ -59,9 +60,13 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-    protected $with = ['notes'];
+    protected $with = ['notes', 'profile'];
 
     public function notes() {
         return $this->hasMany(Note::class);
+    }
+
+    public function profile() {
+        return $this->hasOne(Profile::class);
     }
 }
