@@ -20873,7 +20873,6 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       createNote: false,
-      wordShowResult: '',
       wordsCount: 1,
       title: '',
       languages: [],
@@ -20885,10 +20884,24 @@ __webpack_require__.r(__webpack_exports__);
         note_id: null,
         currentBol: false
       },
-      wordShow: ''
+      wordShow: '',
+      wordShowResult: ''
     };
   },
   methods: {
+    closeModal: function closeModal() {
+      this.title = '';
+      this.languages = [];
+      this.means = [];
+      this.form.note_id = null;
+      this.form.language = '';
+      this.form.mean = '';
+      this.pubpriv = false;
+      this.wordsCount = 1;
+      this.wordShow = '';
+      this.wordShowResult = '';
+      this.createNote = false;
+    },
     searchWord: function searchWord() {
       var _this = this;
 
@@ -20936,6 +20949,8 @@ __webpack_require__.r(__webpack_exports__);
               _this2.form.mean = '';
               _this2.pubpriv = false;
               _this2.wordsCount = 1;
+              _this2.wordShow = '';
+              _this2.wordShowResult = '';
               _this2.createNote = false;
             }
           });
@@ -20976,7 +20991,6 @@ __webpack_require__.r(__webpack_exports__);
     return {
       createNote: false,
       wordsCount: 1,
-      // saveNoteId : null,
       title: '',
       languages: [],
       means: [],
@@ -20987,13 +21001,33 @@ __webpack_require__.r(__webpack_exports__);
         mean: '',
         note_id: null,
         currentBol: true
-      }
+      },
+      wordShow: '',
+      wordShowResult: ''
     };
   },
   methods: {
+    closeModal: function closeModal() {
+      this.wordShow = '';
+      this.wordShowResult = '';
+      this.createNote = false;
+    },
     count: function count() {
       this.wordsCount += 1;
       console.log(this.wordsCount);
+    },
+    searchWord: function searchWord() {
+      var _this = this;
+
+      console.log(this.wordShow);
+      axios.post('/translate/word', {
+        'word': this.wordShow
+      }).then(function (response) {
+        console.log(response.data);
+        _this.wordShowResult = response.data;
+      })["catch"](function (error) {
+        console.log(error);
+      });
     },
     open_edit_modal: function open_edit_modal() {
       console.log(this.note.pubpriv);
@@ -21009,7 +21043,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     updateNote: function updateNote(languages, means) {
-      var _this = this;
+      var _this2 = this;
 
       console.log(this.wordsCount);
       console.log(this.pubpriv);
@@ -21018,28 +21052,28 @@ __webpack_require__.r(__webpack_exports__);
         'title': this.title,
         'pubpriv': this.pubpriv
       }).then(function (response) {
-        _this.form.note_id = response.data;
-        console.log(_this.form.note_id);
+        _this2.form.note_id = response.data;
+        console.log(_this2.form.note_id);
 
         for (var i = 0; i < counts; i++) {
           console.log('dddd');
-          _this.form.language = languages[i];
-          _this.form.mean = means[i];
-          console.log(_this.form.note_id + ' ' + _this.form.language + ' ' + _this.form.mean);
-          console.log(_this.currentCount);
+          _this2.form.language = languages[i];
+          _this2.form.mean = means[i];
+          console.log(_this2.form.note_id + ' ' + _this2.form.language + ' ' + _this2.form.mean);
+          console.log(_this2.currentCount);
 
-          if (i < _this.currentCount) {
-            if (!_this.form.language && !_this.form.mean) {
-              _this.$inertia["delete"]('/words/delete/' + _this.note.words[i].id);
+          if (i < _this2.currentCount) {
+            if (!_this2.form.language && !_this2.form.mean) {
+              _this2.$inertia["delete"]('/words/delete/' + _this2.note.words[i].id);
             } else {
-              console.log(_this.note.words[i].id);
+              console.log(_this2.note.words[i].id);
 
-              _this.$inertia.patch('/words/update/' + _this.note.words[i].id, _this.form);
+              _this2.$inertia.patch('/words/update/' + _this2.note.words[i].id, _this2.form);
             }
           } else {
-            console.log(_this.form.currentBol);
+            console.log(_this2.form.currentBol);
 
-            _this.$inertia.post('/words/store', _this.form);
+            _this2.$inertia.post('/words/store', _this2.form);
           }
         }
       })["catch"](function (error) {
@@ -25216,7 +25250,7 @@ var _hoisted_4 = {
   "class": "bg-white overflow-hidden shadow-xl sm:rounded-lg"
 };
 var _hoisted_5 = {
-  "class": "border border-2"
+  "class": ""
 };
 var _hoisted_6 = {
   "class": "flex flex-row items-start p-2 m-3"
@@ -25259,15 +25293,6 @@ var _hoisted_15 = {
   "class": "tabs border-b-2 mb-3"
 };
 var _hoisted_16 = ["onClick"];
-var _hoisted_17 = {
-  key: 0
-};
-var _hoisted_18 = {
-  key: 1
-};
-var _hoisted_19 = {
-  key: 2
-};
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_my_notes = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("my-notes");
 
@@ -25292,9 +25317,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       /* TEXT */
       ), _hoisted_13, _hoisted_14])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(_ctx.tabs, function (tab) {
         return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
-          "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["w-1/3 p-3 border-1 bg-gray-100", {
-            active: tab === _ctx.selectedTab
-          }]),
+          "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["w-1/3 cursor-pointer py-2 px-4 text-gray-500 border-b-8", _ctx.selectedTab === tab ? 'text-red-500 border-red-500' : '']),
           key: tab,
           onClick: function onClick($event) {
             return _ctx.onClickTab(tab);
@@ -25304,11 +25327,17 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         , _hoisted_16);
       }), 128
       /* KEYED_FRAGMENT */
-      ))]), _ctx.selectedTab == _ctx.tabs[0] ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_17, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_my_notes, {
+      ))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_my_notes, {
         notes: _ctx.notes
       }, null, 8
       /* PROPS */
-      , ["notes"])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _ctx.selectedTab == _ctx.tabs[1] ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_18, " 팔로워 ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _ctx.selectedTab == _ctx.tabs[2] ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_19, " 팔로잉 ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])])])];
+      , ["notes"])], 512
+      /* NEED_PATCH */
+      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, _ctx.selectedTab == _ctx.tabs[0]]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, " 팔로워 ", 512
+      /* NEED_PATCH */
+      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, _ctx.selectedTab == _ctx.tabs[1]]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, " 팔로잉 ", 512
+      /* NEED_PATCH */
+      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, _ctx.selectedTab == _ctx.tabs[2]]])])])])];
     }),
     _: 1
     /* STABLE */
@@ -25407,10 +25436,13 @@ var _hoisted_18 = {
   "class": "my-3"
 };
 var _hoisted_19 = {
+  "class": "inline ml-3"
+};
+var _hoisted_20 = {
   "class": "w-full mb-3"
 };
 
-var _hoisted_20 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("thead", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
+var _hoisted_21 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("thead", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
   "class": "px-5 py-3 border-b-2 border-gray-200 bg-gray-100"
 }, "단어"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
   "class": "px-5 py-3 border-b-2 border-gray-200 bg-gray-100"
@@ -25418,13 +25450,13 @@ var _hoisted_20 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 /* HOISTED */
 );
 
-var _hoisted_21 = ["onUpdate:modelValue"];
 var _hoisted_22 = ["onUpdate:modelValue"];
-var _hoisted_23 = {
+var _hoisted_23 = ["onUpdate:modelValue"];
+var _hoisted_24 = {
   "class": "text-right"
 };
 
-var _hoisted_24 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("svg", {
+var _hoisted_25 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("svg", {
   viewBox: "0 0 20 20",
   "enable-background": "new 0 0 20 20",
   "class": "w-6 h-6 inline-block"
@@ -25435,7 +25467,7 @@ var _hoisted_24 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 /* HOISTED */
 );
 
-var _hoisted_25 = [_hoisted_24];
+var _hoisted_26 = [_hoisted_25];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _this = this;
 
@@ -25516,20 +25548,23 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         }),
         content: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
           return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_18, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+            onKeydown: _cache[4] || (_cache[4] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withKeys)(function () {
+              return _ctx.searchWord && _ctx.searchWord.apply(_ctx, arguments);
+            }, ["enter"])),
             "class": "pt-3 pb-2 px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200",
             type: "text",
-            "onUpdate:modelValue": _cache[4] || (_cache[4] = function ($event) {
+            "onUpdate:modelValue": _cache[5] || (_cache[5] = function ($event) {
               return _ctx.wordShow = $event;
             })
-          }, null, 512
-          /* NEED_PATCH */
+          }, null, 544
+          /* HYDRATE_EVENTS, NEED_PATCH */
           ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.wordShow]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-            onClick: _cache[5] || (_cache[5] = function () {
+            onClick: _cache[6] || (_cache[6] = function () {
               return _ctx.searchWord && _ctx.searchWord.apply(_ctx, arguments);
             })
-          }, "번역"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_this.wordShowResult), 1
+          }, "번역"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_19, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_this.wordShowResult), 1
           /* TEXT */
-          )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("table", _hoisted_19, [_hoisted_20, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(_ctx.wordsCount, function (i) {
+          )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("table", _hoisted_20, [_hoisted_21, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(_ctx.wordsCount, function (i) {
             return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", {
               key: i
             }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
@@ -25540,7 +25575,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               "class": "pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
             }, null, 8
             /* PROPS */
-            , _hoisted_21), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.languages[i - 1]]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div v-if=\"errors.language\"><span>{{ errors.language }}</span></div> ")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+            , _hoisted_22), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.languages[i - 1]]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div v-if=\"errors.language\"><span>{{ errors.language }}</span></div> ")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
               type: "text",
               "onUpdate:modelValue": function onUpdateModelValue($event) {
                 return _ctx.means[i - 1] = $event;
@@ -25548,26 +25583,25 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               "class": "pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
             }, null, 8
             /* PROPS */
-            , _hoisted_22), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.means[i - 1]]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div v-if=\"errors.mean\"><span>{{ errors.mean }}</span></div> ")])]);
+            , _hoisted_23), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.means[i - 1]]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div v-if=\"errors.mean\"><span>{{ errors.mean }}</span></div> ")])]);
           }), 128
           /* KEYED_FRAGMENT */
-          ))])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_23, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-            onClick: _cache[6] || (_cache[6] = function () {
+          ))])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_24, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+            onClick: _cache[7] || (_cache[7] = function () {
               return _ctx.count && _ctx.count.apply(_ctx, arguments);
             }),
             "class": "p-0 w-10 h-10 bg-red-600 rounded-full hover:bg-red-700 active:shadow-lg mouse shadow transition ease-in duration-200 focus:outline-none"
-          }, _hoisted_25)])];
+          }, _hoisted_26)])];
         }),
         footer: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
           return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-            onClick: _cache[7] || (_cache[7] = function ($event) {
+            onClick: _cache[8] || (_cache[8] = function ($event) {
               return _ctx.submit(_this.languages, _this.means);
             }),
             "class": "bg-blue-500"
           }, "저장"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-            onClick: _cache[8] || (_cache[8] = function ($event) {
-              _ctx.createNote = false;
-              _this.wordsCount = 1;
+            onClick: _cache[9] || (_cache[9] = function () {
+              return _ctx.closeModal && _ctx.closeModal.apply(_ctx, arguments);
             }),
             "class": "bg-blue-500"
           }, "취소")];
@@ -25681,10 +25715,16 @@ var _hoisted_17 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 
 var _hoisted_18 = [_hoisted_16, _hoisted_17];
 var _hoisted_19 = {
+  "class": "my-3"
+};
+var _hoisted_20 = {
+  "class": "inline ml-3"
+};
+var _hoisted_21 = {
   "class": "w-full mb-3"
 };
 
-var _hoisted_20 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("thead", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
+var _hoisted_22 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("thead", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
   "class": "px-5 py-3 border-b-2 border-gray-200 bg-gray-100"
 }, "단어"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
   "class": "px-5 py-3 border-b-2 border-gray-200 bg-gray-100"
@@ -25692,13 +25732,13 @@ var _hoisted_20 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 /* HOISTED */
 );
 
-var _hoisted_21 = ["onUpdate:modelValue"];
-var _hoisted_22 = ["onUpdate:modelValue"];
-var _hoisted_23 = {
+var _hoisted_23 = ["onUpdate:modelValue"];
+var _hoisted_24 = ["onUpdate:modelValue"];
+var _hoisted_25 = {
   "class": "text-right"
 };
 
-var _hoisted_24 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("svg", {
+var _hoisted_26 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("svg", {
   viewBox: "0 0 20 20",
   "enable-background": "new 0 0 20 20",
   "class": "w-6 h-6 inline-block"
@@ -25709,7 +25749,7 @@ var _hoisted_24 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 /* HOISTED */
 );
 
-var _hoisted_25 = [_hoisted_24];
+var _hoisted_27 = [_hoisted_26];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _this = this;
 
@@ -25754,27 +25794,44 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         show: _ctx.createNote
       }, {
         title: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-          return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
-            type: "text",
-            name: "name",
-            "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
-              return _ctx.title = $event;
-            }),
-            placeholder: "단어장",
-            "class": "pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
-          }, null, 512
-          /* NEED_PATCH */
-          ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.title]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
+          return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
             "class": "float-right",
-            "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
+            "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
               return _ctx.pubpriv = $event;
             })
           }, _hoisted_18, 512
           /* NEED_PATCH */
-          ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, _ctx.pubpriv]])];
+          ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, _ctx.pubpriv]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+            type: "text",
+            name: "name",
+            "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
+              return _ctx.title = $event;
+            }),
+            placeholder: "단어장",
+            "class": "pt-3 pb-2 block w-4/5 px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
+          }, null, 512
+          /* NEED_PATCH */
+          ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.title]])];
         }),
         content: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-          return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("table", _hoisted_19, [_hoisted_20, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(_ctx.wordsCount, function (i) {
+          return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_19, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+            onKeydown: _cache[4] || (_cache[4] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withKeys)(function () {
+              return _ctx.searchWord && _ctx.searchWord.apply(_ctx, arguments);
+            }, ["enter"])),
+            "class": "pt-3 pb-2 px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200",
+            type: "text",
+            "onUpdate:modelValue": _cache[5] || (_cache[5] = function ($event) {
+              return _ctx.wordShow = $event;
+            })
+          }, null, 544
+          /* HYDRATE_EVENTS, NEED_PATCH */
+          ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.wordShow]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+            onClick: _cache[6] || (_cache[6] = function () {
+              return _ctx.searchWord && _ctx.searchWord.apply(_ctx, arguments);
+            })
+          }, "번역"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_20, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_this.wordShowResult), 1
+          /* TEXT */
+          )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("table", _hoisted_21, [_hoisted_22, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(_ctx.wordsCount, function (i) {
             return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", {
               key: i
             }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
@@ -25785,7 +25842,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               "class": "pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
             }, null, 8
             /* PROPS */
-            , _hoisted_21), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.languages[i - 1]]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+            , _hoisted_23), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.languages[i - 1]]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
               type: "text",
               "onUpdate:modelValue": function onUpdateModelValue($event) {
                 return _ctx.means[i - 1] = $event;
@@ -25793,26 +25850,25 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               "class": "pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
             }, null, 8
             /* PROPS */
-            , _hoisted_22), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.means[i - 1]]])])]);
+            , _hoisted_24), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.means[i - 1]]])])]);
           }), 128
           /* KEYED_FRAGMENT */
-          ))])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_23, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-            onClick: _cache[4] || (_cache[4] = function () {
+          ))])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_25, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+            onClick: _cache[7] || (_cache[7] = function () {
               return _ctx.count && _ctx.count.apply(_ctx, arguments);
             }),
             "class": "p-0 w-10 h-10 bg-red-600 rounded-full hover:bg-red-700 active:shadow-lg mouse shadow transition ease-in duration-200 focus:outline-none"
-          }, _hoisted_25)])];
+          }, _hoisted_27)])];
         }),
         footer: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
           return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-            onClick: _cache[5] || (_cache[5] = function ($event) {
+            onClick: _cache[8] || (_cache[8] = function ($event) {
               return _ctx.updateNote(_this.languages, _this.means);
             }),
             "class": "bg-blue-500"
           }, "수정"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-            onClick: _cache[6] || (_cache[6] = function ($event) {
-              _ctx.createNote = false;
-              _this.wordsCount = 1;
+            onClick: _cache[9] || (_cache[9] = function () {
+              return _ctx.closeModal && _ctx.closeModal.apply(_ctx, arguments);
             }),
             "class": "bg-blue-500"
           }, "취소")];

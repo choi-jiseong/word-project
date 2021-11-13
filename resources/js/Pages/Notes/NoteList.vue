@@ -52,9 +52,9 @@
             </template>
             <template #content>
                 <div class="my-3">
-                    <input class="pt-3 pb-2 px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200" type="text" v-model="wordShow">
+                    <input @keydown.enter="searchWord" class="pt-3 pb-2 px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200" type="text" v-model="wordShow">
                     <button @click="searchWord">번역</button>
-                    <p> {{ this.wordShowResult }}</p>
+                    <p class="inline ml-3"> {{ this.wordShowResult }}</p>
                 </div>
 
                 <table class="w-full mb-3">
@@ -93,7 +93,7 @@
             </template>
             <template #footer>
                 <button @click="submit(this.languages, this.means)" class="bg-blue-500">저장</button>
-                <button @click="createNote = false; this.wordsCount=1" class="bg-blue-500">취소</button>
+                <button @click="closeModal" class="bg-blue-500">취소</button>
             </template>
 
         </jet-dialog-modal>
@@ -127,7 +127,6 @@
         data() {
             return {
                 createNote: false,
-                wordShowResult : '',
                 wordsCount: 1,
                 title: '',
                 languages: [],
@@ -140,10 +139,25 @@
                     currentBol: false,
                 },
                 wordShow : '',
+                wordShowResult : '',
 
             }
         },
         methods: {
+            closeModal() {
+                this.title = ''
+                this.languages = [];
+                this.means = [];
+                this.form.note_id = null;
+                this.form.language = '';
+                this.form.mean = '';
+                this.pubpriv = false;
+                this.wordsCount = 1;
+                this.wordShow = '';
+                this.wordShowResult = '';
+                this.createNote = false;
+
+            },
             searchWord() {
                 console.log(this.wordShow);
                 axios.post('/translate/word', {
@@ -189,6 +203,8 @@
                                     this.form.mean = '';
                                     this.pubpriv = false;
                                     this.wordsCount = 1;
+                                    this.wordShow = '';
+                                    this.wordShowResult = '';
                                     this.createNote = false;
                                 }
                             });

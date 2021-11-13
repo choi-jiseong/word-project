@@ -49,19 +49,25 @@
         </div>
         <jet-dialog-modal :show="createNote">
             <template #title>
+                <select class="float-right" v-model="pubpriv">
+                    <option :value="false">비공개</option>
+                    <option :value="true">공개</option>
+                </select>
                 <input
                     type="text"
                     name="name"
                     v-model="title"
                     placeholder="단어장"
-                    class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
+                    class="pt-3 pb-2 block w-4/5 px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
                     />
-                <select class="float-right" v-model="pubpriv">
-                    <option :value="false">비공개</option>
-                    <option :value="true">공개</option>
-                </select>
+
             </template>
             <template #content>
+                <div class="my-3">
+                    <input @keydown.enter="searchWord" class="pt-3 pb-2 px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200" type="text" v-model="wordShow">
+                    <button @click="searchWord">번역</button>
+                    <p class="inline ml-3"> {{ this.wordShowResult }}</p>
+                </div>
                 <table class="w-full mb-3">
                     <thead>
                         <tr>
@@ -89,7 +95,7 @@
             </template>
             <template #footer>
                 <button @click="updateNote(this.languages, this.means)" class="bg-blue-500">수정</button>
-                <button @click="createNote = false; this.wordsCount=1" class="bg-blue-500">취소</button>
+                <button @click="closeModal" class="bg-blue-500">취소</button>
             </template>
 
         </jet-dialog-modal>
@@ -112,7 +118,6 @@
             return {
                 createNote : false,
                 wordsCount : 1,
-                // saveNoteId : null,
                 title:'',
                 languages: [],
                 means:[],
@@ -123,13 +128,34 @@
                     mean : '',
                     note_id : null,
                     currentBol : true,
-                }
+                },
+                wordShow : '',
+                wordShowResult : '',
             }
         },
         methods: {
+            closeModal() {
+
+                this.wordShow = '';
+                this.wordShowResult = '';
+                this.createNote = false;
+
+            },
             count() {
                 this.wordsCount += 1
                 console.log(this.wordsCount);
+            },
+            searchWord() {
+                console.log(this.wordShow);
+                axios.post('/translate/word', {
+                    'word' : this.wordShow
+                }).then(response=> {
+                    console.log(response.data);
+                    this.wordShowResult = response.data;
+                }).catch(error => {
+                    console.log(error);
+                });
+
             },
             open_edit_modal() {
                 console.log(this.note.pubpriv);
