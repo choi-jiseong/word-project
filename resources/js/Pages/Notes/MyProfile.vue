@@ -10,7 +10,7 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                     <div class="">
-                        <div class="flex flex-row items-start p-2 m-3">
+                        <div class="flex flex-col items-start p-2 m-3 md:flex-row">
                             <div v-if="$page.props.jetstream.managesProfilePhotos" class="flex-shrink-0 mr-3 px-40">
                                 <img class="h-40 w-40 rounded-full object-cover" :src="$page.props.user.profile_photo_url" :alt="$page.props.user.name" />
                             </div>
@@ -20,8 +20,8 @@
                                 </h2>
                                 <div class="mb-4 flex flex-row">
                                     <div class="mr-10">게시물 {{ $page.props.user.notes.length }}</div>
-                                    <div class="mr-10">팔로워 80</div>
-                                    <div class="mr-10">팔로잉 70</div>
+                                    <div class="mr-10">팔로워 {{ followers.length }}</div>
+                                    <div class="mr-10">팔로잉 {{ $page.props.user.following.length }}</div>
                                 </div>
                                 <div class="mb-4">{{ $page.props.user.username }}</div>
                                 <div class="flex justify-between">
@@ -76,6 +76,7 @@
         props: {
             notes: Array,
             errors: Object,
+            followers : Array,
         },
         components: {
             AppLayout,

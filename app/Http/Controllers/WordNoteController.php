@@ -20,13 +20,14 @@ class WordNoteController extends Controller
     public function index()
     {
         $notes = Note::latest()->where('pubpriv', true)->paginate(8);
+        // $user = User::find(auth()->user()->id);
         return Inertia::render('Notes/NoteList', ['notes' => $notes]);
     }
 
     public function myIndex()
     {
         $notes = Note::latest()->where('user_id', auth()->user()->id)->paginate(8);
-        return Inertia::render('Notes/MyProfile', ['notes' => $notes]);
+        return Inertia::render('Notes/MyProfile', ['notes' => $notes, 'followers' => auth()->user()->profile->followers]);
     }
 
     public function searchLanguage($str) {

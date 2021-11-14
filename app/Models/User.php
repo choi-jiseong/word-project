@@ -30,6 +30,18 @@ class User extends Authenticatable
         'username',
     ];
 
+    protected static function boot() {
+
+        parent::boot();
+
+        static::created(function ($user) {
+            $user->profile()->create([
+                'title' => $user->username,
+                'description' => 'No description',
+            ]);
+        });
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -60,7 +72,7 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-    protected $with = ['notes', 'profile'];
+    protected $with = ['notes', 'profile', 'following'];
 
     public function notes() {
         return $this->hasMany(Note::class);
@@ -68,5 +80,9 @@ class User extends Authenticatable
 
     public function profile() {
         return $this->hasOne(Profile::class);
+    }
+
+    public function following() {
+        return $this->belongsToMany(Profile::class);
     }
 }

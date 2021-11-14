@@ -10,22 +10,26 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                     <div class="">
-                        <div class="flex flex-row items-start p-2 m-3">
+                        <div class="flex flex-col items-start p-2 m-3 md:flex-row">
                             <div v-if="$page.props.jetstream.managesProfilePhotos" class="flex-shrink-0 mr-3 px-40">
-                                <img class="h-40 w-40 rounded-full object-cover" :src="user.profile_photo_url" :alt="user.name" />
+                                <img class="h-40 w-40 rounded-full object-cover" :src="viewed_user.profile_photo_url" :alt="viewed_user.name" />
                             </div>
                             <div class="flex-col justify-items-start">
-                                <h2 class="fint-semibold text-xl text-gray-800 leading-tight mb-4">
-                                    {{ user.name }}
-                                </h2>
-                                <div class="mb-4 flex flex-row">
-                                    <div class="mr-10">게시물 {{ user.notes.length }}</div>
-                                    <div class="mr-10">팔로워 80</div>
-                                    <div class="mr-10">팔로잉 70</div>
+                                <div class="flex">
+                                    <h2 class="fint-semibold text-xl text-gray-800 leading-tight mb-4">
+                                        {{ viewed_user.name }}
+                                    </h2>
+                                    <!-- <button class="px-2 mx-4 mb-4 font-semibold text-blue-700 bg-transparent border">follow</button> -->
+                                    <follow-button :user="user" :viewed_user="viewed_user" />
                                 </div>
-                                <div class="mb-4">{{ user.username }}</div>
-                                <div class="mb-4"> {{ user.profile ? user.profile.title : 'no title' }}</div>
-                                <div class="mb-4"> {{ user.profile ? user.profile.description : 'no description' }}</div>
+                                <div class="mb-4 flex flex-row">
+                                    <div class="mr-10">게시물 {{ viewed_user.notes.length }}</div>
+                                    <div class="mr-10">팔로워 {{ followers.length }}</div>
+                                    <div class="mr-10">팔로잉 {{ viewed_user.following.length }}</div>
+                                </div>
+                                <div class="mb-4">{{ viewed_user.username }}</div>
+                                <div class="mb-4"> {{ viewed_user.profile ? viewed_user.profile.title : 'no title' }}</div>
+                                <div class="mb-4"> {{ viewed_user.profile ? viewed_user.profile.description : 'no description' }}</div>
                             </div>
 
                         </div>
@@ -40,7 +44,7 @@
                         <my-notes :notes="notes" />
                     </div>
                     <div v-show="selectedTab == tabs[1]">
-                        팔로워
+                        <followers-list :followers="followers" />
                     </div>
                     <div v-show="selectedTab == tabs[2]">
                         팔로잉
@@ -58,17 +62,22 @@
     } from 'vue'
     import AppLayout from '@/Layouts/AppLayout.vue'
     import MyNotes from './MyNotes.vue'
+    import FollowButton from '../FollowButton.vue'
+    import FollowersList from '../FollowersList.vue'
 
     export default defineComponent({
         props: {
             notes: Array,
             // errors: Object,
             user : Object,
-            currentUser : Object,
+            viewed_user : Object,
+            followers : Array,
         },
         components: {
             AppLayout,
             MyNotes,
+            FollowButton,
+            FollowersList,
 
         },
         data() {

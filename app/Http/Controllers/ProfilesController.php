@@ -6,6 +6,7 @@ use App\Models\Note;
 use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
@@ -18,10 +19,13 @@ class ProfilesController extends Controller
      */
     public function index($name)
     {
+        if(auth()->user()->name == $name) {
+            return Redirect::route('notes.myIndex');
+        }
         $user = User::where('name', $name)->first();
         if($user){
             $notes = Note::where('user_id', $user->id)->latest()->paginate(5);
-            return Inertia::render('Notes/ShowProfile', ['user' => $user, 'notes'=>$notes]);
+            return Inertia::render('Notes/ShowProfile', ['user' => Auth::user(), 'notes'=>$notes, 'viewed_user' => $user, 'followers' => $user->profile->followers]);
         }else{
             return Inertia::render('Notfound');
         }

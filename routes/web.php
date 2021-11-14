@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FollowsController;
 use App\Http\Controllers\ProfilesController;
 use App\Http\Controllers\WordNoteController;
 use Illuminate\Foundation\Application;
@@ -50,8 +51,10 @@ Route::middleware(['auth:sanctum', 'verified'])->patch('/words/update/{wordId}',
 
 Route::middleware(['auth:sanctum', 'verified'])->delete('/words/delete/{wordId}', [WordNoteController::class, 'wordDestroy'])->name('words.destroy');
 
-Route::middleware(['auth:sanctum', 'verified'])->delete('/notes/delete/{noteId}', [WordNoteController::class, 'destroy'])->name('notes.destroy');
-
 Route::middleware(['auth:sanctum', 'verified'])->get('/profiles/{name}', [ProfilesController::class, 'index'])->name('profiles.index');
 
+Route::middleware(['auth:sanctum', 'verified'])->delete('/notes/delete/{noteId}', [WordNoteController::class, 'destroy'])->name('notes.destroy');
+
 Route::apiResource('/profiles', ProfilesController::class);
+
+Route::middleware(['auth:sanctum', 'verified'])->post('follow/{user}', [FollowsController::class, 'store'])->name('follow.store');
