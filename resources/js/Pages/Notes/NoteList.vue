@@ -126,6 +126,7 @@
         },
         data() {
             return {
+                notes_data:this.notes.data,
                 createNote: false,
                 wordsCount: 1,
                 title: '',
@@ -144,6 +145,22 @@
             }
         },
         methods: {
+            // scroll: function () {
+            //     const self = this;
+            //     window.onscroll = function(ev) {
+            //         if((window.innerHeight + window.scrollY) >= document.body.scrollHeight) {
+            //             const notes_links = self.notes.links;
+            //             const next = notes_links[notes_links.length - 1];
+            //             if(next.url) {
+            //                 self.$inertia.visit(next.url, {
+            //                     preserveScroll : true,
+            //                     preserveState : true,
+            //                 });
+            //                 self.notes_data.push(...self,notes.data);
+            //             }
+            //         }
+            //     };
+            // },
             closeModal() {
                 this.title = ''
                 this.languages = [];

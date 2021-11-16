@@ -43,10 +43,10 @@
                         <my-notes :notes="notes" />
                     </div>
                     <div v-show="selectedTab == tabs[1]">
-                        팔로워
+                        <followers-list :followers="followers" />
                     </div>
                     <div v-show="selectedTab == tabs[2]">
-                        팔로잉
+                        <following-list :following="following" />
                     </div>
                 </div>
             </div>
@@ -71,17 +71,23 @@
     import AppLayout from '@/Layouts/AppLayout.vue'
     import MyNotes from './MyNotes.vue'
     import JetDialogModal from '@/JetStream/DialogModal.vue'
+    import FollowersList from '../FollowersList.vue'
+    import FollowingList from '../FollowingList.vue'
+
 
     export default defineComponent({
         props: {
             notes: Array,
             errors: Object,
             followers : Array,
+            following : Array,
         },
         components: {
             AppLayout,
             MyNotes,
             JetDialogModal,
+            FollowersList,
+            FollowingList,
 
         },
         data() {

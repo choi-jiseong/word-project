@@ -47,7 +47,7 @@
                         <followers-list :followers="followers" />
                     </div>
                     <div v-show="selectedTab == tabs[2]">
-                        팔로잉
+                        <following-list :following="following" />
                     </div>
                 </div>
             </div>
@@ -64,6 +64,8 @@
     import MyNotes from './MyNotes.vue'
     import FollowButton from '../FollowButton.vue'
     import FollowersList from '../FollowersList.vue'
+    import FollowingList from '../FollowingList.vue'
+import { Inertia } from '@inertiajs/inertia'
 
     export default defineComponent({
         props: {
@@ -72,12 +74,15 @@
             user : Object,
             viewed_user : Object,
             followers : Array,
+            following : Array,
+
         },
         components: {
             AppLayout,
             MyNotes,
             FollowButton,
             FollowersList,
+            FollowingList,
 
         },
         data() {
@@ -91,7 +96,12 @@
                 this.selectedTab = tab
             }
         },
+        updated(){
+
+        }
+        ,
         created() {
+            Inertia.reload({only : ['user']});
             this.selectedTab = this.tabs[0];
         }
     })

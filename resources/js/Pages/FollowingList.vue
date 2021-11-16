@@ -21,9 +21,9 @@
         </thead>
         <tbody>
 
-          <tr v-for="follower in followers" :key="follower.id" class="bg-blue-200 lg:text-black">
-            <td class="p-3 font-medium"><Link :href="'/profiles/'+follower.name" method="get">{{ follower.name }}</Link></td>
-            <td class="p-3">{{ follower.email }}</td>
+          <tr v-for="follower in following" :key="follower.id" class="bg-blue-200 lg:text-black">
+            <td class="p-3 font-medium"><Link :href="'/profiles/'+follower.user.name" method="get">{{ follower.user.name }}</Link></td>
+            <td class="p-3">{{ follower.user.email }}</td>
 
             <td class="p-3">
               <a href="#" class="text-gray-500 hover:text-gray-100 mr-2">
@@ -52,7 +52,7 @@
         Link
     } from '@inertiajs/inertia-vue3'
 export default {
-    props : ['followers'],
+    props : ['following'],
     components : {
         Link,
     }

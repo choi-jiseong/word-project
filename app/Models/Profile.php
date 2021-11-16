@@ -14,6 +14,8 @@ class Profile extends Model
         'description',
 
     ];
+    // protected $with = ['user'];
+
     public function user() {
         return $this->belongsTo(User::class);
     }

@@ -23,9 +23,10 @@ class ProfilesController extends Controller
             return Redirect::route('notes.myIndex');
         }
         $user = User::where('name', $name)->first();
+        // dd($user->following->load('user'));
         if($user){
             $notes = Note::where('user_id', $user->id)->latest()->paginate(5);
-            return Inertia::render('Notes/ShowProfile', ['user' => Auth::user(), 'notes'=>$notes, 'viewed_user' => $user, 'followers' => $user->profile->followers]);
+            return Inertia::render('Notes/ShowProfile', ['user' => Auth::user(), 'notes'=>$notes, 'viewed_user' => $user->refresh(), 'followers' => $user->profile->followers, 'following' => $user->following->load('user')]);
         }else{
             return Inertia::render('Notfound');
         }
