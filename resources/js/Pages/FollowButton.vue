@@ -24,8 +24,8 @@ export default {
 
         },
         initBtnText() {
-            console.log(this.user.following);
-            for (let i = 0; this.user.following.length; i++) {
+            console.log(this.user.following.length);
+            for (let i = 0; i < this.user.following.length; i++) {
                 console.log(this.user.following[i].id);
                 console.log(this.viewed_user.profile.id);
                 if(this.user.following[i].id == this.viewed_user.profile.id) {

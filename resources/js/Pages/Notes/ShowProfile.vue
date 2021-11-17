@@ -95,13 +95,9 @@ import { Inertia } from '@inertiajs/inertia'
             onClickTab(tab) {
                 this.selectedTab = tab
             }
-        },
-        updated(){
-
         }
         ,
         created() {
-            Inertia.reload({only : ['user']});
             this.selectedTab = this.tabs[0];
         }
     })
