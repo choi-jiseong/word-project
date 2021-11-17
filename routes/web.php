@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\FollowsController;
 use App\Http\Controllers\ProfilesController;
 use App\Http\Controllers\WordNoteController;
@@ -58,3 +59,10 @@ Route::middleware(['auth:sanctum', 'verified'])->delete('/notes/delete/{noteId}'
 Route::apiResource('/profiles', ProfilesController::class);
 
 Route::middleware(['auth:sanctum', 'verified'])->post('follow/{user}', [FollowsController::class, 'store'])->name('follow.store');
+
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/chat/rooms', [ChatController::class, 'rooms'])->name('chat.rooms');
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/chat/room/{roomId}/messages', [ChatController::class, 'messages'])->name('chat.messages');
+
+Route::middleware(['auth:sanctum', 'verified'])->post('/chat/room/{roomId}/message', [ChatController::class, 'newMessage']);

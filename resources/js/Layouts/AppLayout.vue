@@ -28,6 +28,9 @@
                                 <jet-nav-link :href="route('notes.myIndex')" :active="route().current('notes.myIndex')">
                                     My
                                 </jet-nav-link>
+                                <jet-nav-link :href="route('chat.rooms')" :active="route().current('chat.rooms')">
+                                    Chat
+                                </jet-nav-link>
 
                             </div>
                         </div>
@@ -157,6 +160,9 @@
                         </jet-responsive-nav-link>
                         <jet-responsive-nav-link :href="route('notes.myIndex')" :active="route().current('notes.myIndex')">
                             My
+                        </jet-responsive-nav-link>
+                        <jet-responsive-nav-link :href="route('chat.rooms')" :active="route().current('chat.rooms')">
+                            Chat
                         </jet-responsive-nav-link>
                     </div>
 

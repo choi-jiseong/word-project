@@ -22,21 +22,15 @@
         <tbody>
 
           <tr v-for="follower in following" :key="follower.id" class="bg-blue-200 lg:text-black">
-            <td class="p-3 font-medium"><Link :href="'/profiles/'+follower.user.name" method="get">{{ follower.user.name }}</Link></td>
+            <td class="p-3 font-medium">{{ follower.user.name }}</td>
             <td class="p-3">{{ follower.user.email }}</td>
 
             <td class="p-3">
               <a href="#" class="text-gray-500 hover:text-gray-100 mr-2">
-                <i class="material-icons-outlined text-base">visibility</i>
+                <Link :href="'/profiles/'+follower.user.name" method="get"><i class="material-icons-outlined text-base">visibility</i></Link>
               </a>
               <a href="#" class="text-yellow-400 hover:text-gray-100 mx-2">
-                <i class="material-icons-outlined text-base">edit</i>
-              </a>
-              <a
-                href="#"
-                class="text-red-400 hover:text-gray-100 ml-2"
-              >
-                <i class="material-icons-round text-base">delete_outline</i>
+                <i class="material-icons-outlined text-base">chat</i>
               </a>
             </td>
           </tr>
