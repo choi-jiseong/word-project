@@ -20794,18 +20794,33 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    getMessages: function getMessages() {
+    connect: function connect() {
       var _this = this;
 
+      if (this.roomId) {
+        var vm = this;
+        this.getMessages();
+        window.Echo["private"]('chat.' + this.roomId).listen('.message.new', function (e) {
+          vm.getMessages();
+          console.log(_this.messages);
+        });
+      }
+    },
+    disconnect: function disconnect(roomId) {
+      window.Echo.leave('chat.' + roomId);
+    },
+    getMessages: function getMessages() {
+      var _this2 = this;
+
       axios.get('/chat/room/' + this.roomId + '/messages').then(function (response) {
-        _this.messages = response.data;
+        _this2.messages = response.data;
         console.log(response.data);
       })["catch"](function (error) {
         console.log(error);
       });
     },
     sendMessage: function sendMessage() {
-      var _this2 = this;
+      var _this3 = this;
 
       // this.$inertia.post('/chat/room/'+this.roomId+'/message', this.form, {
       //      onSuccess: () => {
@@ -20818,14 +20833,14 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         console.log(response.data);
 
-        _this2.getMessages();
+        _this3.getMessages();
 
-        _this2.form.newMessage = '';
+        _this3.form.newMessage = '';
       });
     }
   },
   created: function created() {
-    this.getMessages();
+    this.connect();
   }
 }));
 

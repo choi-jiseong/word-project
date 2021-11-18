@@ -61,6 +61,20 @@
         }
     },
     methods: {
+        connect() {
+            if(this.roomId) {
+                let vm = this;
+                this.getMessages();
+                window.Echo.private('chat.'+ this.roomId)
+                            .listen('.message.new', e => {
+                                vm.getMessages();
+                                console.log(this.messages);
+                            });
+            }
+        },
+        disconnect(roomId) {
+            window.Echo.leave('chat.'+roomId);
+        },
         getMessages() {
             axios.get('/chat/room/'+this.roomId+'/messages')
             .then(response => {
@@ -89,7 +103,7 @@
         },
     },
     created() {
-        this.getMessages();
+        this.connect();
     }
     })
 </script>
