@@ -44,7 +44,7 @@
     import MessageContainer from './MessageContainer.vue'
 
     export default defineComponent({
-        props : ['messages', 'roomId'],
+        props : ['roomId'],
     components : {
         MessageContainer,
         AppLayout
@@ -54,19 +54,43 @@
             form : {
                 newMessage : '',
                 room_id : this.roomId,
-            }
+            },
+            messages : null,
+
 
         }
     },
     methods: {
-        sendMessage() {
-            this.$inertia.post('/chat/room/'+this.roomId+'/message', this.form, {
-                 onSuccess: () => {
-                     this.form.newMessage = ''
-                 }
+        getMessages() {
+            axios.get('/chat/room/'+this.roomId+'/messages')
+            .then(response => {
+                this.messages = response.data;
+                console.log(response.data);
+            })
+            .catch(error => {
+                console.log(error);
             });
         },
+        sendMessage() {
+            // this.$inertia.post('/chat/room/'+this.roomId+'/message', this.form, {
+            //      onSuccess: () => {
+            //          this.form.newMessage = ''
+            //          this.getMessages();
+            //      }
+            // });
+            axios.post('/chat/room/'+this.roomId+'/message', {
+                message : this.form.newMessage
+            })
+            .then(response => {
+                console.log(response.data);
+                this.getMessages();
+                this.form.newMessage = '';
+            })
+        },
     },
+    created() {
+        this.getMessages();
+    }
     })
 </script>
 

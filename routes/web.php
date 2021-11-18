@@ -63,6 +63,8 @@ Route::middleware(['auth:sanctum', 'verified'])->post('follow/{user}', [FollowsC
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/chat/rooms', [ChatController::class, 'rooms'])->name('chat.rooms');
 
+Route::middleware(['auth:sanctum', 'verified'])->get('/chat/room/{roomId}', [ChatController::class, 'room'])->name('chat.room');
+
 Route::middleware(['auth:sanctum', 'verified'])->get('/chat/room/{roomId}/messages', [ChatController::class, 'messages'])->name('chat.messages');
 
 Route::middleware(['auth:sanctum', 'verified'])->post('/chat/room/{roomId}/message', [ChatController::class, 'newMessage']);

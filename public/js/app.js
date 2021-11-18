@@ -20779,7 +20779,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
-  props: ['messages', 'roomId'],
+  props: ['roomId'],
   components: {
     MessageContainer: _MessageContainer_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
     AppLayout: _Layouts_AppLayout_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
@@ -20789,19 +20789,43 @@ __webpack_require__.r(__webpack_exports__);
       form: {
         newMessage: '',
         room_id: this.roomId
-      }
+      },
+      messages: null
     };
   },
   methods: {
-    sendMessage: function sendMessage() {
+    getMessages: function getMessages() {
       var _this = this;
 
-      this.$inertia.post('/chat/room/' + this.roomId + '/message', this.form, {
-        onSuccess: function onSuccess() {
-          _this.form.newMessage = '';
-        }
+      axios.get('/chat/room/' + this.roomId + '/messages').then(function (response) {
+        _this.messages = response.data;
+        console.log(response.data);
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    sendMessage: function sendMessage() {
+      var _this2 = this;
+
+      // this.$inertia.post('/chat/room/'+this.roomId+'/message', this.form, {
+      //      onSuccess: () => {
+      //          this.form.newMessage = ''
+      //          this.getMessages();
+      //      }
+      // });
+      axios.post('/chat/room/' + this.roomId + '/message', {
+        message: this.form.newMessage
+      }).then(function (response) {
+        console.log(response.data);
+
+        _this2.getMessages();
+
+        _this2.form.newMessage = '';
       });
     }
+  },
+  created: function created() {
+    this.getMessages();
   }
 }));
 
@@ -25505,7 +25529,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
           key: room
         }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Link, {
-          href: '/chat/room/' + room.id + '/messages',
+          href: '/chat/room/' + room.id,
           method: "get"
         }, {
           "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
