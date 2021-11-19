@@ -16,7 +16,7 @@
                     </svg>
                     <span>수정</span>
                 </button>
-                <button v-if="$page.props.user.id == note.user_id" @click="deleteNote" class="m-2 text-white px-4 w-auto h-10 bg-red-600 rounded-full hover:bg-red-700 active:shadow-lg mouse shadow transition ease-in duration-200 focus:outline-none">
+                <button v-if="$page.props.user.id == note.user_id" @click="showDelModal" class="m-2 text-white px-4 w-auto h-10 bg-red-600 rounded-full hover:bg-red-700 active:shadow-lg mouse shadow transition ease-in duration-200 focus:outline-none">
                     <svg viewBox="0 0 20 20" enable-background="new 0 0 20 20" class="w-4 h-4 inline-block mr-1">
                         <path fill="#FFFFFF" d="M17.561,2.439c-1.442-1.443-2.525-1.227-2.525-1.227L8.984,7.264L2.21,14.037L1.2,18.799l4.763-1.01                                                        l6.774-6.771l6.052-6.052C18.788,4.966,19.005,3.883,17.561,2.439z M5.68,17.217l-1.624,0.35c-0.156-0.293-0.345-0.586-0.69-0.932
                                                 c-0.346-0.346-0.639-0.533-0.932-0.691l0.35-1.623l0.47-0.469c0,0,0.883,0.018,1.881,1.016c0.997,0.996,1.016,1.881,1.016,1.881
@@ -30,7 +30,7 @@
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                    <table class="w-full mb-3">
+                    <table class="w-full">
                         <thead>
                             <tr>
                                 <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100">단어</th>
@@ -39,8 +39,8 @@
                         </thead>
                         <tbody>
                             <tr v-for="word in note.words" :key="word.id">
-                                <th>{{ word.language }}</th>
-                                <th>{{ word.mean }}</th>
+                                <th class="border-b-2 p-2">{{ word.language }}</th>
+                                <th class="border-b-2 p-2">{{ word.mean }}</th>
                             </tr>
                         </tbody>
                     </table>
@@ -63,11 +63,6 @@
 
             </template>
             <template #content>
-                <div class="my-3">
-                    <input @keydown.enter="searchWord" class="pt-3 pb-2 px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200" type="text" v-model="wordShow">
-                    <button @click="searchWord">번역</button>
-                    <p class="inline ml-3"> {{ this.wordShowResult }}</p>
-                </div>
                 <table class="w-full mb-3">
                     <thead>
                         <tr>
@@ -77,8 +72,8 @@
                     </thead>
                     <tbody>
                         <tr v-for="i in wordsCount" :key="i">
-                            <th><input type="text" v-model="languages[i-1]" class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"></th>
-                            <th><input type="text" v-model="means[i-1]" class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"></th>
+                            <th><input type="text" @keydown.enter="searchMean(i-1)" v-model="languages[i-1]" class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"></th>
+                            <th><input type="text" @keydown.enter="searchWord(i-1)" v-model="means[i-1]" class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"></th>
                         </tr>
                     </tbody>
                 </table>
@@ -94,10 +89,51 @@
 
             </template>
             <template #footer>
-                <button @click="updateNote(this.languages, this.means)" class="bg-blue-500">수정</button>
-                <button @click="closeModal" class="bg-blue-500">취소</button>
+                <button @click="submit(this.languages, this.means)" class="m-1 text-white px-4 w-auto h-10 bg-red-600 rounded-full hover:bg-red-700 active:shadow-lg mouse shadow transition ease-in duration-200 focus:outline-none">
+                            <svg viewBox="0 0 20 20" enable-background="new 0 0 20 20"
+                                class="w-4 h-4 inline-block mr-1">
+                                <path fill="#FFFFFF" d="M17.561,2.439c-1.442-1.443-2.525-1.227-2.525-1.227L8.984,7.264L2.21,14.037L1.2,18.799l4.763-1.01                                                        l6.774-6.771l6.052-6.052C18.788,4.966,19.005,3.883,17.561,2.439z M5.68,17.217l-1.624,0.35c-0.156-0.293-0.345-0.586-0.69-0.932
+                                                        c-0.346-0.346-0.639-0.533-0.932-0.691l0.35-1.623l0.47-0.469c0,0,0.883,0.018,1.881,1.016c0.997,0.996,1.016,1.881,1.016,1.881
+                                                        L5.68,17.217z" />
+                            </svg>
+                            <span>저장</span></button>
+                <button @click="closeModal" class="m-1 text-white px-4 w-auto h-10 bg-red-600 rounded-full hover:bg-red-700 active:shadow-lg mouse shadow transition ease-in duration-200 focus:outline-none">
+                            <svg viewBox="0 0 20 20" enable-background="new 0 0 20 20"
+                                class="w-4 h-4 inline-block mr-1">
+                                <path fill="#FFFFFF" d="M17.561,2.439c-1.442-1.443-2.525-1.227-2.525-1.227L8.984,7.264L2.21,14.037L1.2,18.799l4.763-1.01                                                        l6.774-6.771l6.052-6.052C18.788,4.966,19.005,3.883,17.561,2.439z M5.68,17.217l-1.624,0.35c-0.156-0.293-0.345-0.586-0.69-0.932
+                                                        c-0.346-0.346-0.639-0.533-0.932-0.691l0.35-1.623l0.47-0.469c0,0,0.883,0.018,1.881,1.016c0.997,0.996,1.016,1.881,1.016,1.881
+                                                        L5.68,17.217z" />
+                            </svg>
+                            <span>취소</span></button>
             </template>
 
+        </jet-dialog-modal>
+        <jet-dialog-modal :show="showDelete" >
+            <template #content>
+
+                <!-- <div class="flex flex-col p-8 bg-white shadow-md hover:shodow-lg rounded-2xl"> -->
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                class="w-16 h-16 rounded-2xl p-3 border border-blue-100 text-blue-400 bg-blue-50" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <div class="flex flex-col ml-3">
+                                <div class="font-medium leading-none">Delete Your Note?</div>
+                                <p class="text-sm text-gray-600 leading-none mt-1">By deleting your note you will lose your all data
+                                </p>
+                            </div>
+                        </div>
+                        <div>
+                            <button @click="deleteNote" class="flex-no-shrink bg-red-500 px-5 py-2 text-sm shadow-sm hover:shadow-lg font-medium tracking-wider border-2 border-red-500 text-white rounded-full">Delete</button>
+                            <button @click="showDelete = false" class="flex-no-shrink bg-red-500 px-5 ml-2 py-2 text-sm shadow-sm hover:shadow-lg font-medium tracking-wider border-2 border-red-500 text-white rounded-full">Cancel</button>
+                        </div>
+
+                    </div>
+                <!-- </div> -->
+            </template>
         </jet-dialog-modal>
     </app-layout>
 </template>
@@ -125,35 +161,47 @@
                 means:[],
                 pubpriv : false,
                 currentCount : null,
+                showDelete : false,
                 form : {
                     language : '',
                     mean : '',
                     note_id : null,
                     currentBol : true,
                 },
-                wordShow : '',
-                wordShowResult : '',
             }
         },
         methods: {
             closeModal() {
 
-                this.wordShow = '';
-                this.wordShowResult = '';
                 this.createNote = false;
 
+            },
+            showDelModal(){
+                this.showDelete = true;
             },
             count() {
                 this.wordsCount += 1
                 console.log(this.wordsCount);
             },
-            searchWord() {
+            searchWord(index) {
                 console.log(this.wordShow);
                 axios.post('/translate/word', {
-                    'word' : this.wordShow
+                    'word' : this.means[index],
                 }).then(response=> {
                     console.log(response.data);
-                    this.wordShowResult = response.data;
+                    this.languages[index] = response.data;
+                }).catch(error => {
+                    console.log(error);
+                });
+
+            },
+            searchMean(index) {
+                console.log(this.wordShow);
+                axios.post('/translate/word', {
+                    'word' : this.languages[index]
+                }).then(response=> {
+                    console.log(response.data);
+                    this.means[index] = response.data;
                 }).catch(error => {
                     console.log(error);
                 });
@@ -205,25 +253,12 @@
                     console.log(error);
                 });
 
-                // this.title = ''
-                // this.languages = [];
-                // this.means = [];
-                // this.form.note_id = null;
-                // this.form.language = '',
-                // this.form.mean = '',
-                // this.pubpriv = false;
                 this.createNote = false;
 
             },
             deleteNote() {
 
-                if(confirm('삭제?')){
                     this.$inertia.delete('/notes/delete/'+this.note.id);
-                }else{
-                    return;
-
-                }
-
             }
         },
     })

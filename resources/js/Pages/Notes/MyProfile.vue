@@ -15,7 +15,7 @@
                                 <img class="h-40 w-40 rounded-full object-cover" :src="$page.props.user.profile_photo_url" :alt="$page.props.user.name" />
                             </div>
                             <div class="flex-col justify-items-start">
-                                <h2 class="fint-semibold text-xl text-gray-800 leading-tight mb-4">
+                                <h2 class="font-semibold text-xl text-gray-800 leading-tight mb-4">
                                     {{ $page.props.user.name }}
                                 </h2>
                                 <div class="mb-4 flex flex-row">
@@ -29,7 +29,7 @@
                                         <div class="mb-4"> {{ $page.props.user.profile ? $page.props.user.profile.title : 'no title' }}</div>
                                         <div class="mb-4"> {{ $page.props.user.profile ? $page.props.user.profile.description : 'no description' }}</div>
                                     </div>
-                                    <button @click="showProModal" class="border">profile 편집</button>
+                                    <button @click="showProModal" class="border p-2 my-auto rounded-2xl">profile 편집</button>
                                 </div>
                             </div>
                         </div>
@@ -54,14 +54,20 @@
     </app-layout>
     <jet-dialog-modal :show="showProEdit" >
         <template #content>
-            <label for="">title : </label>
-            <input type="text" v-model="form.proTitle"><br>
-            <label for="">description : </label>
-            <input type="text" v-model="form.proDescription">
-            <button @click="editPro">수정</button>
-            <button @click="showProEdit = false">취소</button>
+            <div class="flex flex-col">
+                <label for="">Title</label>
+                <input type="text" v-model="form.proTitle"><br>
+                <label for="">Description</label>
+                <input type="text" v-model="form.proDescription">
+            </div>
+
+        </template>
+        <template #footer>
+            <button @click="editPro" class="flex-no-shrink bg-red-500 px-5 py-2 text-sm shadow-sm hover:shadow-lg font-medium tracking-wider border-2 border-red-500 text-white rounded-full">수정</button>
+            <button @click="showProEdit = false" class="flex-no-shrink ml-2 bg-red-500 px-5 py-2 text-sm shadow-sm hover:shadow-lg font-medium tracking-wider border-2 border-red-500 text-white rounded-full">취소</button>
         </template>
     </jet-dialog-modal>
+
 </template>
 
 <script>
@@ -118,7 +124,6 @@
                         }
                     });
                 }
-
             },
             showProModal(){
                 this.showProEdit = true;
@@ -135,9 +140,3 @@
     })
 </script>
 
-<style scoped>
-.active {
-    background: #f7c9c9;
-}
-
-</style>

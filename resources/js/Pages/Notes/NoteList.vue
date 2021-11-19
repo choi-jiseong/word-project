@@ -47,7 +47,7 @@
         <jet-dialog-modal :show="createNote">
             <template #title>
                 <select class="float-right" v-model="pubpriv">
-                    <option :value="false">비공개</option>
+                    <option :value="false" >비공개</option>
                     <option :value="true">공개</option>
                 </select>
                 <input type="text" name="name" v-model="title" placeholder="단어장"
@@ -55,12 +55,6 @@
 
             </template>
             <template #content>
-                <!-- <div class="my-3">
-                    <input @keydown.enter="searchWord" class="pt-3 pb-2 px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200" type="text" v-model="wordShow">
-                    <button @click="searchWord">번역</button>
-                    <p class="inline ml-3"> {{ this.wordShowResult }}</p>
-                </div> -->
-
                 <table class="w-full mb-3">
                     <thead>
                         <tr>
@@ -71,7 +65,7 @@
                     <tbody>
                         <tr v-for="i in wordsCount" :key="i">
                             <th>
-                                <input type="text" v-model="languages[i-1]"
+                                <input type="text" @keydown.enter="searchMean(i-1)" v-model="languages[i-1]"
                                     class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200">
                                 <!-- <div v-if="errors.language"><span>{{ errors.language }}</span></div> -->
                             </th>
@@ -96,8 +90,22 @@
 
             </template>
             <template #footer>
-                <button @click="submit(this.languages, this.means)" class="bg-blue-500">저장</button>
-                <button @click="closeModal" class="bg-blue-500">취소</button>
+                <button @click="submit(this.languages, this.means)" class="m-1 text-white px-4 w-auto h-10 bg-red-600 rounded-full hover:bg-red-700 active:shadow-lg mouse shadow transition ease-in duration-200 focus:outline-none">
+                            <svg viewBox="0 0 20 20" enable-background="new 0 0 20 20"
+                                class="w-4 h-4 inline-block mr-1">
+                                <path fill="#FFFFFF" d="M17.561,2.439c-1.442-1.443-2.525-1.227-2.525-1.227L8.984,7.264L2.21,14.037L1.2,18.799l4.763-1.01                                                        l6.774-6.771l6.052-6.052C18.788,4.966,19.005,3.883,17.561,2.439z M5.68,17.217l-1.624,0.35c-0.156-0.293-0.345-0.586-0.69-0.932
+                                                        c-0.346-0.346-0.639-0.533-0.932-0.691l0.35-1.623l0.47-0.469c0,0,0.883,0.018,1.881,1.016c0.997,0.996,1.016,1.881,1.016,1.881
+                                                        L5.68,17.217z" />
+                            </svg>
+                            <span>저장</span></button>
+                <button @click="closeModal" class="m-1 text-white px-4 w-auto h-10 bg-red-600 rounded-full hover:bg-red-700 active:shadow-lg mouse shadow transition ease-in duration-200 focus:outline-none">
+                            <svg viewBox="0 0 20 20" enable-background="new 0 0 20 20"
+                                class="w-4 h-4 inline-block mr-1">
+                                <path fill="#FFFFFF" d="M17.561,2.439c-1.442-1.443-2.525-1.227-2.525-1.227L8.984,7.264L2.21,14.037L1.2,18.799l4.763-1.01                                                        l6.774-6.771l6.052-6.052C18.788,4.966,19.005,3.883,17.561,2.439z M5.68,17.217l-1.624,0.35c-0.156-0.293-0.345-0.586-0.69-0.932
+                                                        c-0.346-0.346-0.639-0.533-0.932-0.691l0.35-1.623l0.47-0.469c0,0,0.883,0.018,1.881,1.016c0.997,0.996,1.016,1.881,1.016,1.881
+                                                        L5.68,17.217z" />
+                            </svg>
+                            <span>취소</span></button>
             </template>
 
         </jet-dialog-modal>
@@ -143,28 +151,9 @@
                     note_id: null,
                     currentBol: false,
                 },
-                // wordShow : '',
-                // wordShowResult : '',
-
             }
         },
         methods: {
-            // scroll: function () {
-            //     const self = this;
-            //     window.onscroll = function(ev) {
-            //         if((window.innerHeight + window.scrollY) >= document.body.scrollHeight) {
-            //             const notes_links = self.notes.links;
-            //             const next = notes_links[notes_links.length - 1];
-            //             if(next.url) {
-            //                 self.$inertia.visit(next.url, {
-            //                     preserveScroll : true,
-            //                     preserveState : true,
-            //                 });
-            //                 self.notes_data.push(...self,notes.data);
-            //             }
-            //         }
-            //     };
-            // },
             closeModal() {
                 this.title = ''
                 this.languages = [];
@@ -174,8 +163,6 @@
                 this.form.mean = '';
                 this.pubpriv = false;
                 this.wordsCount = 1;
-                this.wordShow = '';
-                this.wordShowResult = '';
                 this.createNote = false;
 
             },
@@ -186,6 +173,18 @@
                 }).then(response=> {
                     console.log(response.data);
                     this.languages[index] = response.data;
+                    // this.wordShow = '';
+                }).catch(error => {
+                    console.log(error);
+                });
+
+            },
+            searchMean(index) {
+                axios.post('/translate/word', {
+                    'word' : this.languages[index],
+                }).then(response=> {
+                    console.log(response.data);
+                    this.means[index] = response.data;
                     // this.wordShow = '';
                 }).catch(error => {
                     console.log(error);
@@ -225,8 +224,6 @@
                                     this.form.mean = '';
                                     this.pubpriv = false;
                                     this.wordsCount = 1;
-                                    this.wordShow = '';
-                                    this.wordShowResult = '';
                                     this.createNote = false;
                                 }
                             });

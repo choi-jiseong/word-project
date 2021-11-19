@@ -17,6 +17,12 @@ class ChatController extends Controller
 {
     public function rooms() {
         $rooms = auth()->user()->chatroom;
+        $users = [];
+        // dd($rooms[0]->pivot);
+        dd(DB::table('chat_room_user')->select('user_id')->where('chat_room_id', $rooms[0]->pivot->chat_room_id)->get());
+        // for($i = 0; $i < $rooms->count(); $i++) {
+        //     $user = User::
+        // }
         // dd(auth()->user()->chatroom);
         return Inertia::render('Chats/MyChatList', ['rooms' => $rooms]);
     }

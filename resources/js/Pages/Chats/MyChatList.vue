@@ -8,9 +8,25 @@
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+                <!-- <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                     <div v-for="room in rooms" :key="room">
                         <Link :href="'/chat/room/'+room.id" method="get">{{ room.id }}</Link>
+                    </div>
+                </div> -->
+                <div class="py-10 h-screen px-2">
+                    <div class="max-w-md mx-auto bg-gray-100 shadow-lg rounded-lg overflow-hidden md:max-w-lg">
+                        <div class="md:flex">
+                            <div class="w-full p-4">
+                                <ul>
+                                    <li v-for="room in rooms" :key="room" class="flex justify-between items-center bg-white mt-2 p-2 hover:shadow-lg rounded cursor-pointer transition">
+                                        <div class="flex ml-2"> <img src="https://i.imgur.com/aq39RMA.jpg" width="40" height="40" class="rounded-full">
+                                            <div class="flex flex-col ml-2"> <span class="font-medium text-black">Jessica Koel</span> <span class="text-sm text-gray-400 truncate w-32">Hey, Joel, I here to help you out please tell me</span> </div>
+                                        </div>
+                                        <div class="flex flex-col items-center"> <span class="text-gray-300">11:26</span> <i class="fa fa-star text-green-400"></i> </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
