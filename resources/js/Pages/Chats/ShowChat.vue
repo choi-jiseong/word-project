@@ -56,8 +56,6 @@
                 room_id : this.roomId,
             },
             messages : null,
-
-
         }
     },
     methods: {

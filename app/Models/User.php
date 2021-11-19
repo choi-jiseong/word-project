@@ -72,7 +72,7 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-    protected $with = ['notes', 'profile', 'following'];
+    protected $with = ['notes', 'profile', 'following', 'chatroom'];
 
     public function notes() {
         return $this->hasMany(Note::class);
@@ -84,6 +84,11 @@ class User extends Authenticatable
 
     public function following() {
         return $this->belongsToMany(Profile::class);
+    }
+
+    public function chatroom()
+    {
+        return $this->belongsToMany(ChatRoom::class);
     }
 
 }

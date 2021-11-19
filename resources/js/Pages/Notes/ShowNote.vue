@@ -5,7 +5,7 @@
                 <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                     {{ note.title }}
                 </h2>
-                <h3 class="text-gray-500">{{ note.user.name }}</h3>
+                <Link :href="'/profiles/'+note.user.name" method="get"><span class="text-gray-500">{{ note.user.name }}</span></Link>
             </div>
             <div class="text-right h-10">
                 <button v-if="$page.props.user.id == note.user_id" @click="open_edit_modal" class="m-2 text-white px-4 w-auto h-10 bg-red-600 rounded-full hover:bg-red-700 active:shadow-lg mouse shadow transition ease-in duration-200 focus:outline-none">
@@ -106,13 +106,15 @@
     import { defineComponent } from 'vue'
     import AppLayout from '@/Layouts/AppLayout.vue'
     import JetDialogModal from '@/JetStream/DialogModal.vue'
-
+    import {
+        Link
+    } from '@inertiajs/inertia-vue3'
     export default defineComponent({
         props : ['note'],
         components: {
             AppLayout,
             JetDialogModal,
-
+            Link,
         },
         data() {
             return {

@@ -68,3 +68,5 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/chat/room/{roomId}', [Cha
 Route::middleware(['auth:sanctum', 'verified'])->get('/chat/room/{roomId}/messages', [ChatController::class, 'messages'])->name('chat.messages');
 
 Route::middleware(['auth:sanctum', 'verified'])->post('/chat/room/{roomId}/message', [ChatController::class, 'newMessage']);
+
+Route::middleware(['auth:sanctum', 'verified'])->post('/chat/room/create', [ChatController::class, 'createRoom']);

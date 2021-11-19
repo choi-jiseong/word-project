@@ -30,7 +30,7 @@
                 <Link :href="'/profiles/'+follower.user.name" method="get"><i class="material-icons-outlined text-base">visibility</i></Link>
               </a>
               <a href="#" class="text-yellow-400 hover:text-gray-100 mx-2">
-                <i class="material-icons-outlined text-base">chat</i>
+                <i @click="playChat(follower.user.id)" class="material-icons-outlined text-base">chat</i>
               </a>
             </td>
           </tr>
@@ -49,7 +49,12 @@ export default {
     props : ['following'],
     components : {
         Link,
-    }
+    },
+    methods: {
+        playChat(userId) {
+            this.$inertia.post('/chat/room/create', {chatUserId : userId});
+        }
+    },
 
 }
 </script>

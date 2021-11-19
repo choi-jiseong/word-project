@@ -10,7 +10,7 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                     <div v-for="room in rooms" :key="room">
-                        <Link :href="'/chat/room/'+room.id" method="get">1</Link>
+                        <Link :href="'/chat/room/'+room.id" method="get">{{ room.id }}</Link>
                     </div>
                 </div>
             </div>

@@ -19,11 +19,11 @@ class WordNoteController extends Controller
      */
     public function index()
     {
-        // $notes = Note::latest()->where('pubpriv', true)->paginate(5);
-        $users = auth()->user()->following()->pluck('profiles.user_id');
+        $notes = Note::latest()->where('pubpriv', true)->with('user')->paginate(5);
 
-        $notes = Note::whereIn('user_id', $users)->where('pubpriv', true)->with('user')->latest()->paginate(5);
-        // $user = User::find(auth()->user()->id);
+        // $users = auth()->user()->following()->pluck('profiles.user_id');
+        // $notes = Note::whereIn('user_id', $users)->where('pubpriv', true)->with('user')->latest()->paginate(5);
+
         return Inertia::render('Notes/NoteList', ['notes' => $notes]);
     }
 

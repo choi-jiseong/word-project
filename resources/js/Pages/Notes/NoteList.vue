@@ -55,11 +55,11 @@
 
             </template>
             <template #content>
-                <div class="my-3">
+                <!-- <div class="my-3">
                     <input @keydown.enter="searchWord" class="pt-3 pb-2 px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200" type="text" v-model="wordShow">
                     <button @click="searchWord">번역</button>
                     <p class="inline ml-3"> {{ this.wordShowResult }}</p>
-                </div>
+                </div> -->
 
                 <table class="w-full mb-3">
                     <thead>
@@ -76,7 +76,7 @@
                                 <!-- <div v-if="errors.language"><span>{{ errors.language }}</span></div> -->
                             </th>
                             <th>
-                                <input type="text" v-model="means[i-1]"
+                                <input type="text" @keydown.enter="searchWord(i-1)" v-model="means[i-1]"
                                     class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200">
                                 <!-- <div v-if="errors.mean"><span>{{ errors.mean }}</span></div> -->
                             </th>
@@ -143,8 +143,8 @@
                     note_id: null,
                     currentBol: false,
                 },
-                wordShow : '',
-                wordShowResult : '',
+                // wordShow : '',
+                // wordShowResult : '',
 
             }
         },
@@ -179,13 +179,14 @@
                 this.createNote = false;
 
             },
-            searchWord() {
+            searchWord(index) {
                 console.log(this.wordShow);
                 axios.post('/translate/word', {
-                    'word' : this.wordShow
+                    'word' : this.means[index],
                 }).then(response=> {
                     console.log(response.data);
-                    this.wordShowResult = response.data;
+                    this.languages[index] = response.data;
+                    // this.wordShow = '';
                 }).catch(error => {
                     console.log(error);
                 });
