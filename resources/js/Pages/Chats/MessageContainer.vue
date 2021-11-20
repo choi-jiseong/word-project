@@ -1,22 +1,17 @@
 <template>
-    <ul class="chat">
-        <li class="left clearfix" v-for="message in messages" :key="message.id">
-            <div class="clearfix">
-                <div class="header">
-                    <strong>
-                        {{ message.user.name }}
-                    </strong>
-                </div>
-                <p>
-                    {{ message.message }}
-                </p>
-            </div>
-        </li>
-    </ul>
+    <div v-if="messages" class="p-2  flex flex-col-reverse overflow-scroll">
+        <div v-for="msg in messages" :key="msg.id">
+            <styled-message-item :message="msg" />
+        </div>
+    </div>
 </template>
 
 <script>
+    import StyledMessageItem from './StyledMessageItem.vue'
 export default {
     props : ['messages'],
+    components : {
+        StyledMessageItem
+    }
 }
 </script>
