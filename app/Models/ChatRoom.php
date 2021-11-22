@@ -9,6 +9,8 @@ class ChatRoom extends Model
 {
     use HasFactory;
 
+    // protected $with = ['chatuser'];
+
     public function messages() {
         return $this->hasMany(ChatMessage::class);
     }

@@ -19,20 +19,20 @@ class ChatController extends Controller
         $rooms = auth()->user()->chatroom;
         $users = [];
         // dd($rooms);
-        for($i = 0; $i < $rooms->count(); $i++) {
-            $room = DB::table('chat_room_user')->select('user_id')->where('chat_room_id', $rooms[$i]->pivot->chat_room_id)->get();
-            for($j = 0; $j < $room->count(); $j++) {
-                if((int)($room[$j]->user_id) != auth()->user()->id){
-                    array_push($users , (int)($room[$j]->user_id));
-                }
-            }
-        }
-        // dd($users);
-        $chatUsers = User::whereIn('id', $users)->get();
+        // for($i = 0; $i < $rooms->count(); $i++) {
+        //     $room = DB::table('chat_room_user')->select('user_id')->where('chat_room_id', $rooms[$i]->pivot->chat_room_id)->get();
+        //     for($j = 0; $j < $room->count(); $j++) {
+        //         if((int)($room[$j]->user_id) != auth()->user()->id){
+        //             array_push($users , (int)($room[$j]->user_id));
+        //         }
+        //     }
+        // }
+        // // dd($users);
+        // $chatUsers = User::whereIn('id', $users)->get();
         // dd($chatUsers)
         // dd(DB::table('chat_room_user')->select('user_id')->whereIn('chat_room_id', $rooms[0]->pivot->chat_room_id)->get());
 
-        return Inertia::render('Chats/MyChatList', ['rooms' => $rooms, 'chatUsers' => $chatUsers]);
+        return Inertia::render('Chats/MyChatList', ['rooms' => $rooms->load('chatuser')]);
     }
 
     public function createRoom(Request $request) {
