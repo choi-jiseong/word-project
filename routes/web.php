@@ -46,6 +46,8 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/notes/show/{noteId}', [Wo
 
 Route::middleware(['auth:sanctum', 'verified'])->post('/words/store', [WordNoteController::class, 'wordStore'])->name('words.store');
 
+Route::middleware(['auth:sanctum', 'verified'])->post('/words/newStore', [WordNoteController::class, 'wordNewStore'])->name('words.newStore');
+
 Route::middleware(['auth:sanctum', 'verified'])->patch('/notes/update/{noteId}', [WordNoteController::class, 'update'])->name('notes.update');
 
 Route::middleware(['auth:sanctum', 'verified'])->patch('/words/update/{wordId}', [WordNoteController::class, 'wordUpdate'])->name('words.update');

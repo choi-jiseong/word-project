@@ -133,14 +133,27 @@ class WordNoteController extends Controller
     public function wordStore(Request $request)
     {
         // dd($request);
+        $languages = $request->languages;
+        // dd($languages);
+        $means = $request->means;
         // $request->validate(['language' => 'required', 'mean' => 'required']);
-        Word::create(['language' => $request->language, 'mean' => $request->mean, 'note_id' => $request->note_id]);
-
-        if($request->currentBol) {
-            return Redirect::route('notes.show', ['noteId' => $request->note_id]);
-        }else{
-            return Redirect::route('notes.index');
+        for ($i = 0; $i < $request->counts; $i++){
+            Word::create(['language' => $languages[$i], 'mean' => $means[$i], 'note_id' => $request->note_id]);
         }
+            return Redirect::route('notes.index');
+
+    }
+
+    public function wordNewStore(Request $request)
+    {
+        $languages = $request->languages;
+        // dd($languages);
+        $means = $request->means;
+        // $request->validate(['language' => 'required', 'mean' => 'required']);
+        for ($i = 0; $i < $request->counts; $i++){
+            Word::create(['language' => $languages[$i], 'mean' => $means[$i], 'note_id' => $request->note_id]);
+        }
+            return $request->note_id;
 
     }
 
@@ -152,7 +165,6 @@ class WordNoteController extends Controller
      */
     public function show($id)
     {
-
 
         $note = Note::find($id);
         $userName = User::find($note->user_id)->name;
@@ -200,7 +212,7 @@ class WordNoteController extends Controller
             $word->mean = $request->mean;
             $word->save();
 
-        return Redirect::route('notes.show', ['noteId' =>$word->note_id]);
+        return $word->note_id;
     }
 
     /**
@@ -222,6 +234,7 @@ class WordNoteController extends Controller
         $noteId = $word->note_id;
         $word->delete();
 
-        return Redirect::route('notes.show', ['noteId' =>$noteId]) ;
+        // return Redirect::route('notes.show', ['noteId' =>$noteId]) ;
+        return $noteId;
     }
 }

@@ -72,8 +72,8 @@
                     </thead>
                     <tbody>
                         <tr v-for="i in wordsCount" :key="i">
-                            <th><input type="text" @keydown.enter="searchMean(i-1)" v-model="languages[i-1]" class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"></th>
-                            <th><input type="text" @keydown.enter="searchWord(i-1)" v-model="means[i-1]" class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"></th>
+                            <th><input type="text" @keydown.enter="searchMean(i-1)" v-model="form.languages[i-1]" class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"></th>
+                            <th><input type="text" @keydown.enter="searchWord(i-1)" v-model="form.means[i-1]" class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"></th>
                         </tr>
                     </tbody>
                 </table>
@@ -89,7 +89,7 @@
 
             </template>
             <template #footer>
-                <button @click="submit(this.languages, this.means)" class="m-1 text-white px-4 w-auto h-10 bg-red-600 rounded-full hover:bg-red-700 active:shadow-lg mouse shadow transition ease-in duration-200 focus:outline-none">
+                <button @click="updateNote(this.form.languages, this.form.means)" class="m-1 text-white px-4 w-auto h-10 bg-red-600 rounded-full hover:bg-red-700 active:shadow-lg mouse shadow transition ease-in duration-200 focus:outline-none">
                             <svg viewBox="0 0 20 20" enable-background="new 0 0 20 20"
                                 class="w-4 h-4 inline-block mr-1">
                                 <path fill="#FFFFFF" d="M17.561,2.439c-1.442-1.443-2.525-1.227-2.525-1.227L8.984,7.264L2.21,14.037L1.2,18.799l4.763-1.01                                                        l6.774-6.771l6.052-6.052C18.788,4.966,19.005,3.883,17.561,2.439z M5.68,17.217l-1.624,0.35c-0.156-0.293-0.345-0.586-0.69-0.932
@@ -145,6 +145,7 @@
     import {
         Link
     } from '@inertiajs/inertia-vue3'
+import axios from 'axios'
     export default defineComponent({
         props : ['note'],
         components: {
@@ -157,39 +158,44 @@
                 createNote : false,
                 wordsCount : 1,
                 title:'',
-                languages: [],
-                means:[],
                 pubpriv : false,
                 currentCount : null,
                 showDelete : false,
                 form : {
-                    language : '',
-                    mean : '',
-                    note_id : null,
-                    currentBol : true,
+                    languages : [],
+                    means : [],
+                    note_id : this.note.id,
                 },
+                newForm : {
+                    languages : [],
+                    means : [],
+                    note_id : this.note.id,
+                    counts : 0,
+                },
+
             }
         },
         methods: {
+            async getNote() {
+                await this.$inertia.get('/notes/show/'+this.note.id);
+            },
             closeModal() {
 
                 this.createNote = false;
-
             },
             showDelModal(){
                 this.showDelete = true;
             },
             count() {
                 this.wordsCount += 1
-                console.log(this.wordsCount);
             },
             searchWord(index) {
                 console.log(this.wordShow);
                 axios.post('/translate/word', {
-                    'word' : this.means[index],
+                    'word' : this.form.means[index],
                 }).then(response=> {
                     console.log(response.data);
-                    this.languages[index] = response.data;
+                    this.form.languages[index] = response.data;
                 }).catch(error => {
                     console.log(error);
                 });
@@ -198,10 +204,10 @@
             searchMean(index) {
                 console.log(this.wordShow);
                 axios.post('/translate/word', {
-                    'word' : this.languages[index]
+                    'word' : this.form.languages[index]
                 }).then(response=> {
                     console.log(response.data);
-                    this.means[index] = response.data;
+                    this.form.means[index] = response.data;
                 }).catch(error => {
                     console.log(error);
                 });
@@ -215,50 +221,72 @@
                 this.currentCount = this.note.words.length;
                 this.pubpriv = this.note.pubpriv == 1 ? true : false;
                 for (let i = 0; i < this.wordsCount; i++) {
-                    this.languages[i] = this.note.words[i].language;
-                    this.means[i] = this.note.words[i].mean;
+                    this.form.languages[i] = this.note.words[i].language;
+                    this.form.means[i] = this.note.words[i].mean;
                 }
             },
             updateNote(languages, means) {
-                console.log(this.wordsCount);
-                console.log(this.pubpriv);
-                const counts = this.wordsCount;
                 axios.patch('/notes/update/'+this.note.id, {
                     'title' : this.title,
                     'pubpriv' : this.pubpriv,
                     })
                 .then(response => {
                     this.form.note_id = response.data;
-                    console.log(this.form.note_id);
-                    for(let i=0; i< counts; i++ ){
-                        console.log('dddd');
-                        this.form.language = languages[i]
-                        this.form.mean = means[i]
-                        console.log(this.form.note_id + ' ' + this.form.language + ' ' +  this.form.mean);
-                        console.log(this.currentCount);
-                        if(i < this.currentCount) {
-                            if(!this.form.language && !this.form.mean){
-                                this.$inertia.delete('/words/delete/'+this.note.words[i].id);
-                            }else{
-                                console.log(this.note.words[i].id);
-                                this.$inertia.patch('/words/update/'+this.note.words[i].id, this.form);
-                            }
-                        }else {
-                            console.log(this.form.currentBol);
-                            this.$inertia.post('/words/store', this.form);
-                        }
-                    }
+                    this.updateWord(languages, means);
+                    this.getNote();
                 })
                 .catch(error => {
                     console.log(error);
                 });
 
-                this.createNote = false;
+
+            },
+            newCreateWord() {
+                    axios.post('/words/newStore', this.newForm)
+                    .then(response => {
+                        console.log(response.data);
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            },
+            updateWord(languages, means) {
+                for(let i=0; i< this.wordsCount; i++ ){
+                        this.form.languages[i]= languages[i];
+                        this.form.means[i] = means[i];
+                        if(i < this.currentCount) {
+                            if(!this.form.languages[i] && !this.form.means[i]){
+                                axios.delete('/words/delete/'+this.note.words[i].id)
+                                    .then(response => {
+                                        console.log(response.data);
+                                    })
+                                    .catch(error => {
+                                        console.log(error);
+                                    });
+                            }else{
+                                if(this.form.languages[i] != this.note.words[i].language || this.form.means[i] != this.note.words[i].mean) {
+                                axios.patch('/words/update/'+this.note.words[i].id, {'language' : this.form.languages[i], 'mean' : this.form.means[i]})
+                                    .then(response => {
+                                        console.log(response.data);
+                                    })
+                                    .catch(error => {
+                                        console.log(error);
+                                    });
+                                }
+                            }
+                        }else {
+                            // console.log(this.form.languages);
+                            this.newForm.languages.push(languages[i]);
+                            this.newForm.means.push(means[i]);
+                            this.newForm.counts += 1;
+                        }
+                    }
+                    this.newCreateWord();
 
             },
             deleteNote() {
-
-                    this.$inertia.delete('/notes/delete/'+this.note.id);
+                console.log('delete');
+                this.$inertia.delete('/notes/delete/'+this.note.id);
             }
         },
     })

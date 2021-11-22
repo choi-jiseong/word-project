@@ -65,12 +65,12 @@
                     <tbody>
                         <tr v-for="i in wordsCount" :key="i">
                             <th>
-                                <input type="text" @keydown.enter="searchMean(i-1)" v-model="languages[i-1]"
+                                <input type="text" @keydown.enter="searchMean(i-1)" v-model="this.form.languages[i-1]"
                                     class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200">
                                 <!-- <div v-if="errors.language"><span>{{ errors.language }}</span></div> -->
                             </th>
                             <th>
-                                <input type="text" @keydown.enter="searchWord(i-1)" v-model="means[i-1]"
+                                <input type="text" @keydown.enter="searchWord(i-1)" v-model="this.form.means[i-1]"
                                     class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200">
                                 <!-- <div v-if="errors.mean"><span>{{ errors.mean }}</span></div> -->
                             </th>
@@ -90,7 +90,7 @@
 
             </template>
             <template #footer>
-                <button @click="submit(this.languages, this.means)" class="m-1 text-white px-4 w-auto h-10 bg-red-600 rounded-full hover:bg-red-700 active:shadow-lg mouse shadow transition ease-in duration-200 focus:outline-none">
+                <button @click="submit(this.form.languages, this.form.means)" class="m-1 text-white px-4 w-auto h-10 bg-red-600 rounded-full hover:bg-red-700 active:shadow-lg mouse shadow transition ease-in duration-200 focus:outline-none">
                             <svg viewBox="0 0 20 20" enable-background="new 0 0 20 20"
                                 class="w-4 h-4 inline-block mr-1">
                                 <path fill="#FFFFFF" d="M17.561,2.439c-1.442-1.443-2.525-1.227-2.525-1.227L8.984,7.264L2.21,14.037L1.2,18.799l4.763-1.01                                                        l6.774-6.771l6.052-6.052C18.788,4.966,19.005,3.883,17.561,2.439z M5.68,17.217l-1.624,0.35c-0.156-0.293-0.345-0.586-0.69-0.932
@@ -123,7 +123,6 @@
         Link
     } from '@inertiajs/inertia-vue3'
     import axios from 'axios'
-
     export default defineComponent({
         props: {
             notes: Array,
@@ -134,7 +133,6 @@
             JetDialogModal,
             InputLink,
             Link,
-
         },
         data() {
             return {
@@ -142,98 +140,80 @@
                 createNote: false,
                 wordsCount: 1,
                 title: '',
-                languages: [],
-                means: [],
                 pubpriv: false,
                 form: {
-                    language: '',
-                    mean: '',
+                    languages: [],
+                    means: [],
                     note_id: null,
-                    currentBol: false,
+                    counts : 0,
                 },
             }
         },
         methods: {
             closeModal() {
                 this.title = ''
-                this.languages = [];
-                this.means = [];
                 this.form.note_id = null;
-                this.form.language = '';
-                this.form.mean = '';
+                this.form.languages = [];
+                this.form.means = [];
                 this.pubpriv = false;
                 this.wordsCount = 1;
                 this.createNote = false;
-
             },
             searchWord(index) {
-                console.log(this.wordShow);
                 axios.post('/translate/word', {
-                    'word' : this.means[index],
+                    'word' : this.form.means[index],
                 }).then(response=> {
                     console.log(response.data);
-                    this.languages[index] = response.data;
-                    // this.wordShow = '';
+                    this.form.languages[index] = response.data;
                 }).catch(error => {
                     console.log(error);
                 });
-
             },
             searchMean(index) {
                 axios.post('/translate/word', {
-                    'word' : this.languages[index],
+                    'word' : this.form.languages[index],
                 }).then(response=> {
                     console.log(response.data);
-                    this.means[index] = response.data;
-                    // this.wordShow = '';
+                    this.form.means[index] = response.data;
                 }).catch(error => {
                     console.log(error);
                 });
-
             },
             count() {
                 this.wordsCount += 1
-                console.log(this.wordsCount);
             },
             open_create_modal() {
                 this.createNote = true;
             },
             submit(languages, means) {
-
                 const counts = this.wordsCount;
+
                 axios.post('/notes/store', {
                         'title': this.title,
                         'pubpriv': this.pubpriv,
                     })
                     .then(response => {
                         this.form.note_id = response.data;
-                        for (let i = 0; i < counts; i++) {
-                            console.log('dddd');
-                            this.form.language = languages[i]
-                            this.form.mean = means[i]
-                            // if(!this.form.language || !this.form.mean){
-                            //     return;
-                            // }
-                            this.$inertia.post('/words/store', this.form, {
+                        this.form.languages = languages;
+                        this.form.means = means;
+                        this.form.counts = counts;
+                        this.$inertia.post('/words/store', this.form, {
                                 onSuccess: () => {
-                                    this.title = ''
-                                    this.languages = [];
-                                    this.means = [];
-                                    this.form.note_id = null;
-                                    this.form.language = '';
-                                    this.form.mean = '';
-                                    this.pubpriv = false;
-                                    this.wordsCount = 1;
-                                    this.createNote = false;
                                 }
                             });
-                        }
                     })
                     .catch(error => {
                         console.log(error);
                     });
+                    this.title = ''
+                    this.form.note_id = null;
+                    this.form.languages = [];
+                    this.form.means = [];
+                    this.form.counts = 0;
+                    this.pubpriv = false;
+                    this.wordsCount = 1;
+                    this.createNote = false;
             },
-
         },
     })
 </script>
