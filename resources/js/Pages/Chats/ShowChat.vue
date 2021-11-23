@@ -17,7 +17,7 @@
                                 <div class="card w-5/6 m-auto">
                                     <div class="card-header"></div>
                                     <div class="card-body">
-                                        <message-container :messages="messages" />
+                                        <message-container :messages="this.messages" />
                                     </div>
                                     <div class="card-footer">
                                         <div class="border-t-2 border-gray-200 px-4 pt-4 mb-2 sm:mb-0">
@@ -80,7 +80,7 @@
                 window.Echo.private('chat.'+ this.roomId)
                             .listen('.message.new', e => {
                                 vm.getMessages();
-                                console.log(this.messages);
+                                // console.log(this.messages);
                             });
             }
         },
@@ -91,7 +91,7 @@
             axios.get('/chat/room/'+this.roomId+'/messages')
             .then(response => {
                 this.messages = response.data;
-                console.log(response.data);
+                // console.log(response.data);
             })
             .catch(error => {
                 console.log(error);
@@ -108,7 +108,7 @@
                 message : this.form.newMessage
             })
             .then(response => {
-                console.log(response.data);
+                // console.log(response.data);
                 this.getMessages();
                 this.form.newMessage = '';
             })

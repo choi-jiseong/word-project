@@ -17,41 +17,22 @@ class ChatController extends Controller
 {
     public function rooms() {
         $rooms = auth()->user()->chatroom;
-        $users = [];
-        // dd($rooms);
-        // for($i = 0; $i < $rooms->count(); $i++) {
-        //     $room = DB::table('chat_room_user')->select('user_id')->where('chat_room_id', $rooms[$i]->pivot->chat_room_id)->get();
-        //     for($j = 0; $j < $room->count(); $j++) {
-        //         if((int)($room[$j]->user_id) != auth()->user()->id){
-        //             array_push($users , (int)($room[$j]->user_id));
-        //         }
-        //     }
-        // }
-        // // dd($users);
-        // $chatUsers = User::whereIn('id', $users)->get();
-        // dd($chatUsers)
-        // dd(DB::table('chat_room_user')->select('user_id')->whereIn('chat_room_id', $rooms[0]->pivot->chat_room_id)->get());
 
         return Inertia::render('Chats/MyChatList', ['rooms' => $rooms->load('chatuser')]);
     }
 
     public function createRoom(Request $request) {
-        // dd($request->chatUserId);
-        // $chatUser = $request->chatUser;
-        // dd(auth()->user());
+
         $chatUserId = $request->chatUserId;
         $chatUser = User::find($chatUserId);
-        // dd($chatUser);
+
         $chatrooms = DB::table('chat_room_user')->select('chat_room_id')->whereIn('user_id', [auth()->user()->id, $chatUserId])->get();
-        // dd($chatrooms->count());
-        // dd($chatrooms);
+
         $roomId = $chatrooms[0]->chat_room_id;
         for ($i = 1; $i < $chatrooms->count(); $i++) {
             // dd($roomId  ==$chatrooms[$i]->chat_room_id);
             if ($roomId == $chatrooms[$i]->chat_room_id){
                 $roomId = $chatrooms[$i]->chat_room_id;
-                // return Inertia::render('Chats/ShowChat', ['roomId' => $roomId]);
-                // dd(1);
                 return Redirect::route('chat.room', [(int)$roomId]);
             }
             $roomId = $chatrooms[$i]->chat_room_id;
@@ -61,10 +42,8 @@ class ChatController extends Controller
 
         auth()->user()->chatroom()->attach($room->id);
         $chatUser->chatroom()->attach($room->id);
-        // dd(1);
-        // return Inertia::render('Chats/ShowChat', ['roomId' => $room->id]);
+
         return Redirect::route('chat.room', [$room->id]);
-        // return 2;
 
     }
 
@@ -79,7 +58,7 @@ class ChatController extends Controller
 
     public function messages($roomId) {
         $messages = ChatMessage::where('chat_room_id', $roomId)->with('user')->latest()->get();
-        // return Inertia::render('Chats/ShowChat', ['messages' => $messages, 'roomId' => $roomId]);
+
         return $messages;
     }
 

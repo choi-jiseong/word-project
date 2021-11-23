@@ -11,7 +11,9 @@
                     <div class="py-10 px-2">
                         <div class="max-w-md mx-auto bg-gray-100 shadow-lg rounded-lg overflow-hidden md:max-w-lg">
                             <div class="md:flex">
+
                                 <div class="w-full p-4">
+                                    Chat List
                                     <ul>
                                         <li v-for="room in rooms" :key="room" class="flex justify-between items-center bg-white mt-2 p-2 hover:shadow-lg rounded cursor-pointer transition">
                                             <Link :href="'/chat/room/'+room.id" method="get">
