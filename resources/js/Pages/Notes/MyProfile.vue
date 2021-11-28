@@ -14,8 +14,8 @@
                         </div>
                     </nav>
                 <div class="bg-white overflow-hidden sm:rounded-lg w-full">
-                    <div class="">
-                        <div class="flex flex-col items-start p-2 m-5 md:flex-row">
+                    <div class="bg-cover bg-right" style="background-image: url('https://images.unsplash.com/photo-1422190441165-ec2956dc9ecc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1600&q=80');">
+                        <div class="flex flex-col items-start p-5 m-5 md:flex-row">
                             <div v-if="$page.props.jetstream.managesProfilePhotos" class="flex-shrink-0 mr-3 px-40">
                                 <img class="h-40 w-40 rounded-full object-cover" :src="$page.props.user.profile_photo_url" :alt="$page.props.user.name" />
                             </div>

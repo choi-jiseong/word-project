@@ -1,10 +1,20 @@
 <template>
-    <app-layout title="Dashboard">
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Chat
-            </h2>
-        </template>
+    <new-layout title="Dashboard">
+    <template #content>
+    <section class="bg-white py-8">
+
+        <div class="container mx-auto flex items-center flex-wrap pt-4 pb-12">
+
+            <nav id="store" class="w-full z-30 top-0 px-6 py-1">
+                <div class="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 px-2 py-3">
+
+                    <a class="uppercase tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl " href="#">
+				CHATS
+			</a>
+                </div>
+            </nav>
+        </div>
+
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
@@ -33,20 +43,24 @@
                 </div>
             </div>
         </div>
-    </app-layout>
+        </section>
+        </template>
+
+    </new-layout>
 </template>
 
 <script>
     import { defineComponent } from 'vue'
-    import AppLayout from '@/Layouts/AppLayout.vue'
+    // import AppLayout from '@/Layouts/AppLayout.vue'
+    import NewLayout from '@/Layouts/NewLayout.vue'
     import {
         Link
     } from '@inertiajs/inertia-vue3'
     export default defineComponent({
         props : ['rooms'],
         components: {
-            AppLayout,
             Link,
+            NewLayout,
         },
     })
 </script>

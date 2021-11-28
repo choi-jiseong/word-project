@@ -38,8 +38,16 @@
                     notebook
                 </a>
             </div>
+            <div class="order-2 md:order-3 flex items-center" v-if="!$page.props.user">
+                <Link :href="route('login')" class="text-sm text-gray-700 underline">
+                    Log in
+                </Link>
 
-            <div class="order-2 md:order-3 flex items-center" id="nav-content">
+                <Link :href="route('register')" class="ml-4 text-sm text-gray-700 underline">
+                    Register
+                </Link>
+            </div>
+            <div v-else class="order-2 md:order-3 flex items-center" id="nav-content">
 
                 <!-- <a class="inline-block no-underline hover:text-black" href="#">
                     <svg class="fill-current hover:text-black" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -118,7 +126,14 @@
     import JetDropdownLink from '@/Jetstream/DropdownLink.vue'
     import JetNavLink from '@/Jetstream/NavLink.vue'
     import JetResponsiveNavLink from '@/Jetstream/ResponsiveNavLink.vue'
+    import { Link } from '@inertiajs/inertia-vue3';
 export default {
+            props: {
+            canLogin: Boolean,
+            canRegister: Boolean,
+            laravelVersion: String,
+            phpVersion: String,
+        },
     components : {
 
             JetApplicationMark,
@@ -127,6 +142,7 @@ export default {
             JetDropdownLink,
             JetNavLink,
             JetResponsiveNavLink,
+            Link
 
     },
     data() {
