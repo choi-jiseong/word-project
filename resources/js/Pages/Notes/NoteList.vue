@@ -1,13 +1,6 @@
 <template>
-    <app-layout title="Dashboard">
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                ノート
-            </h2>
-
-        </template>
-
-        <div class="py-12">
+    <new-layout title="Dashboard">
+        <!-- <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                     <div class="text-right">
@@ -43,7 +36,70 @@
                     <input-link :links="notes.links" />
                 </div>
             </div>
+        </div> -->
+    <template #content>
+    <section class="bg-white py-8">
+
+        <div class="container mx-auto flex items-center flex-wrap pt-4 pb-12">
+
+            <nav id="store" class="w-full z-30 top-0 px-6 py-1">
+                <div class="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 px-2 py-3">
+
+                    <a class="uppercase tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl " href="#">
+				NOTES
+			</a>
+            <div class="text-right">
+                        <button @click="open_create_modal()" @close="createNote == false"
+                            class="m-5 text-white px-4 w-auto h-10 bg-gray-900 rounded-full hover:bg-gray-700 active:shadow-lg mouse shadow transition ease-in duration-200 focus:outline-none">
+                            <svg viewBox="0 0 20 20" enable-background="new 0 0 20 20"
+                                class="w-4 h-4 inline-block mr-1">
+                                <path fill="#FFFFFF" d="M17.561,2.439c-1.442-1.443-2.525-1.227-2.525-1.227L8.984,7.264L2.21,14.037L1.2,18.799l4.763-1.01                                                        l6.774-6.771l6.052-6.052C18.788,4.966,19.005,3.883,17.561,2.439z M5.68,17.217l-1.624,0.35c-0.156-0.293-0.345-0.586-0.69-0.932
+                                                        c-0.346-0.346-0.639-0.533-0.932-0.691l0.35-1.623l0.47-0.469c0,0,0.883,0.018,1.881,1.016c0.997,0.996,1.016,1.881,1.016,1.881
+                                                        L5.68,17.217z" />
+                            </svg>
+                            <span>Note</span>
+                        </button>
+                    </div>
+
+                    <!-- <div class="flex items-center" id="store-nav-content">
+                        <a class="pl-3 inline-block no-underline hover:text-black" href="#">
+                            <svg class="fill-current hover:text-black" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                <path d="M7 11H17V13H7zM4 7H20V9H4zM10 15H14V17H10z" />
+                            </svg>
+                        </a>
+
+                        <a class="pl-3 inline-block no-underline hover:text-black" href="#">
+                            <svg class="fill-current hover:text-black" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                <path d="M10,18c1.846,0,3.543-0.635,4.897-1.688l4.396,4.396l1.414-1.414l-4.396-4.396C17.365,13.543,18,11.846,18,10 c0-4.411-3.589-8-8-8s-8,3.589-8,8S5.589,18,10,18z M10,4c3.309,0,6,2.691,6,6s-2.691,6-6,6s-6-2.691-6-6S6.691,4,10,4z" />
+                            </svg>
+                        </a>
+                    </div> -->
+              </div>
+            </nav>
+
+            <div v-for="note in notes.data" :key="note" class="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
+                <a :href="'/notes/show/'+note.id">
+                    <img class="hover:grow hover:shadow-lg" src="https://images.unsplash.com/photo-1555982105-d25af4182e4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&h=400&q=80">
+                    <div class="pt-3 flex items-center justify-between">
+                        <p class="">{{ note.title }}</p>
+                        <p class="h-6 w-6 fill-current text-gray-500">
+                            {{ note.user.name }}
+                        </p>
+                    </div>
+                    <p class="pt-1 text-gray-900">{{ note.created_at }}</p>
+                </a>
+            </div>
+
+
+        <div class="w-full">
+            <input-link :links="notes.links" />
         </div>
+        </div>
+
+    </section>
+
+    </template>
+    </new-layout>
         <jet-dialog-modal :show="createNote">
             <template #title>
                 <select class="float-right" v-model="pubpriv">
@@ -67,19 +123,17 @@
                             <th>
                                 <input type="text" @keydown.enter="searchMean(i-1)" v-model="this.form.languages[i-1]"
                                     class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200">
-                                <!-- <div v-if="errors.language"><span>{{ errors.language }}</span></div> -->
                             </th>
                             <th>
                                 <input type="text" @keydown.enter="searchWord(i-1)" v-model="this.form.means[i-1]"
                                     class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200">
-                                <!-- <div v-if="errors.mean"><span>{{ errors.mean }}</span></div> -->
                             </th>
                         </tr>
                     </tbody>
                 </table>
                 <div class="text-right">
                     <button @click="count"
-                        class="p-0 w-10 h-10 bg-red-600 rounded-full hover:bg-red-700 active:shadow-lg mouse shadow transition ease-in duration-200 focus:outline-none">
+                        class="p-0 w-10 h-10 bg-gray-900 rounded-full hover:bg-gray-700 active:shadow-lg mouse shadow transition ease-in duration-200 focus:outline-none">
                         <svg viewBox="0 0 20 20" enable-background="new 0 0 20 20" class="w-6 h-6 inline-block">
                             <path fill="#FFFFFF" d="M16,10c0,0.553-0.048,1-0.601,1H11v4.399C11,15.951,10.553,16,10,16c-0.553,0-1-0.049-1-0.601V11H4.601
                                                     C4.049,11,4,10.553,4,10c0-0.553,0.049-1,0.601-1H9V4.601C9,4.048,9.447,4,10,4c0.553,0,1,0.048,1,0.601V9h4.399
@@ -90,7 +144,7 @@
 
             </template>
             <template #footer>
-                <button @click="submit(this.form.languages, this.form.means)" class="m-1 text-white px-4 w-auto h-10 bg-red-600 rounded-full hover:bg-red-700 active:shadow-lg mouse shadow transition ease-in duration-200 focus:outline-none">
+                <button @click="submit(this.form.languages, this.form.means)" class="m-1 text-white px-4 w-auto h-10 bg-gray-900 rounded-full hover:bg-gray-700 active:shadow-lg mouse shadow transition ease-in duration-200 focus:outline-none">
                             <svg viewBox="0 0 20 20" enable-background="new 0 0 20 20"
                                 class="w-4 h-4 inline-block mr-1">
                                 <path fill="#FFFFFF" d="M17.561,2.439c-1.442-1.443-2.525-1.227-2.525-1.227L8.984,7.264L2.21,14.037L1.2,18.799l4.763-1.01                                                        l6.774-6.771l6.052-6.052C18.788,4.966,19.005,3.883,17.561,2.439z M5.68,17.217l-1.624,0.35c-0.156-0.293-0.345-0.586-0.69-0.932
@@ -98,7 +152,7 @@
                                                         L5.68,17.217z" />
                             </svg>
                             <span>저장</span></button>
-                <button @click="closeModal" class="m-1 text-white px-4 w-auto h-10 bg-red-600 rounded-full hover:bg-red-700 active:shadow-lg mouse shadow transition ease-in duration-200 focus:outline-none">
+                <button @click="closeModal" class="m-1 text-white px-4 w-auto h-10 bg-gray-900 rounded-full hover:bg-gray-700 active:shadow-lg mouse shadow transition ease-in duration-200 focus:outline-none">
                             <svg viewBox="0 0 20 20" enable-background="new 0 0 20 20"
                                 class="w-4 h-4 inline-block mr-1">
                                 <path fill="#FFFFFF" d="M17.561,2.439c-1.442-1.443-2.525-1.227-2.525-1.227L8.984,7.264L2.21,14.037L1.2,18.799l4.763-1.01                                                        l6.774-6.771l6.052-6.052C18.788,4.966,19.005,3.883,17.561,2.439z M5.68,17.217l-1.624,0.35c-0.156-0.293-0.345-0.586-0.69-0.932
@@ -109,7 +163,6 @@
             </template>
 
         </jet-dialog-modal>
-    </app-layout>
 </template>
 
 <script>
@@ -117,6 +170,7 @@
         defineComponent
     } from 'vue'
     import AppLayout from '@/Layouts/AppLayout.vue'
+    import NewLayout from '@/Layouts/NewLayout.vue'
     import JetDialogModal from '@/JetStream/DialogModal.vue'
     import InputLink from '../InputLink.vue'
     import {
@@ -133,6 +187,7 @@
             JetDialogModal,
             InputLink,
             Link,
+            NewLayout,
         },
         data() {
             return {
@@ -147,6 +202,7 @@
                     note_id: null,
                     counts : 0,
                 },
+                // list : [1, 1, 1, 1,1 ,1 ,1]
             }
         },
         methods: {
@@ -183,7 +239,9 @@
                 this.wordsCount += 1
             },
             open_create_modal() {
+                console.log('dd')
                 this.createNote = true;
+                console.log(this.createNote)
             },
             submit(languages, means) {
                 const counts = this.wordsCount;
@@ -199,20 +257,21 @@
                         this.form.counts = counts;
                         this.$inertia.post('/words/store', this.form, {
                                 onSuccess: () => {
+                                    this.title = ''
+                                    this.form.note_id = null;
+                                    this.form.languages = [];
+                                    this.form.means = [];
+                                    this.form.counts = 0;
+                                    this.pubpriv = false;
+                                    this.wordsCount = 1;
+                                    this.createNote = false;
                                 }
                             });
                     })
                     .catch(error => {
                         console.log(error);
                     });
-                    this.title = ''
-                    this.form.note_id = null;
-                    this.form.languages = [];
-                    this.form.means = [];
-                    this.form.counts = 0;
-                    this.pubpriv = false;
-                    this.wordsCount = 1;
-                    this.createNote = false;
+
             },
         },
     })
