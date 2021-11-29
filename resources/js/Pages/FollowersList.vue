@@ -10,7 +10,7 @@
         <h2 class="text-2xl text-gray-500 font-bold">Followers</h2>
 
       </div>
-      <table class="table w-full text-gray-100 border-separate space-y-6 text-sm">
+      <table class="table w-full text-gray-900 border-separate space-y-6 text-sm">
         <thead class="bg-gray-900 text-white">
           <tr>
             <th class="p-3 text-left">Name</th>
@@ -30,7 +30,7 @@
                 <Link :href="'/profiles/'+follower.name" method="get"><i class="material-icons-outlined text-base">visibility</i></Link>
               </a>
               <a href="#" class="text-yellow-400 hover:text-gray-100 mx-2">
-                <i @click="playChat(follower.id)" class="material-icons-outlined text-base">chat</i>
+                <i v-if="$page.props.user.id != follower.id" @click="playChat(follower.id)" class="material-icons-outlined text-base">chat</i>
               </a>
             </td>
           </tr>

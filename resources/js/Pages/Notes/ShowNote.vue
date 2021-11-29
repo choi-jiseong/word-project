@@ -1,52 +1,74 @@
 <template>
-    <app-layout title="Dashboard">
+    <new-layout title="Dashboard">
         <template #header>
-            <div class="flex flex-col">
-                <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                    {{ note.title }}
-                </h2>
-                <Link :href="'/profiles/'+note.user.name" method="get"><span class="text-gray-500">{{ note.user.name }}</span></Link>
-            </div>
-            <div class="text-right h-10">
-                <button v-if="$page.props.user.id == note.user_id" @click="open_edit_modal" class="m-2 text-white px-4 w-auto h-10 bg-red-600 rounded-full hover:bg-red-700 active:shadow-lg mouse shadow transition ease-in duration-200 focus:outline-none">
-                    <svg viewBox="0 0 20 20" enable-background="new 0 0 20 20" class="w-4 h-4 inline-block mr-1">
-                        <path fill="#FFFFFF" d="M17.561,2.439c-1.442-1.443-2.525-1.227-2.525-1.227L8.984,7.264L2.21,14.037L1.2,18.799l4.763-1.01                                                        l6.774-6.771l6.052-6.052C18.788,4.966,19.005,3.883,17.561,2.439z M5.68,17.217l-1.624,0.35c-0.156-0.293-0.345-0.586-0.69-0.932
-                                                c-0.346-0.346-0.639-0.533-0.932-0.691l0.35-1.623l0.47-0.469c0,0,0.883,0.018,1.881,1.016c0.997,0.996,1.016,1.881,1.016,1.881
-                                                L5.68,17.217z"/>
-                    </svg>
-                    <span>수정</span>
-                </button>
-                <button v-if="$page.props.user.id == note.user_id" @click="showDelModal" class="m-2 text-white px-4 w-auto h-10 bg-red-600 rounded-full hover:bg-red-700 active:shadow-lg mouse shadow transition ease-in duration-200 focus:outline-none">
-                    <svg viewBox="0 0 20 20" enable-background="new 0 0 20 20" class="w-4 h-4 inline-block mr-1">
-                        <path fill="#FFFFFF" d="M17.561,2.439c-1.442-1.443-2.525-1.227-2.525-1.227L8.984,7.264L2.21,14.037L1.2,18.799l4.763-1.01                                                        l6.774-6.771l6.052-6.052C18.788,4.966,19.005,3.883,17.561,2.439z M5.68,17.217l-1.624,0.35c-0.156-0.293-0.345-0.586-0.69-0.932
-                                                c-0.346-0.346-0.639-0.533-0.932-0.691l0.35-1.623l0.47-0.469c0,0,0.883,0.018,1.881,1.016c0.997,0.996,1.016,1.881,1.016,1.881
-                                                L5.68,17.217z"/>
-                    </svg>
-                    <span>삭제</span>
-                </button>
-            </div>
+            <section class="bg-white py-8">
+
+                <div class="container mx-auto flex items-center flex-wrap pt-4 pb-12" style="background-image: url('https://images.unsplash.com/photo-1555982105-d25af4182e4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1600&h=400&q=80');">
+
+                    <nav id="store" class="w-full z-30 top-0 px-6 py-1">
+                        <div class="w-full container mx-auto flex flex-col justify-between mt-0 px-2 py-3">
+
+                            <a class="uppercase tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl " href="#">
+                        {{ note.title }}
+                        </a>
+                        <Link :href="'/profiles/'+note.user.name" method="get"><span class="text-gray-500">{{ note.user.name }}</span></Link>
+                        </div>
+                    </nav>
+                    <div class="w-full items-right">
+                        <div class="text-right h-10">
+                            <button v-if="$page.props.user.id == note.user_id" @click="open_edit_modal" class="m-2 text-white px-4 w-auto h-10 bg-gray-900 rounded-full hover:bg-gray-700 active:shadow-lg mouse shadow transition ease-in duration-200 focus:outline-none">
+                                <svg viewBox="0 0 20 20" enable-background="new 0 0 20 20" class="w-4 h-4 inline-block mr-1">
+                                    <path fill="#FFFFFF" d="M17.561,2.439c-1.442-1.443-2.525-1.227-2.525-1.227L8.984,7.264L2.21,14.037L1.2,18.799l4.763-1.01                                                        l6.774-6.771l6.052-6.052C18.788,4.966,19.005,3.883,17.561,2.439z M5.68,17.217l-1.624,0.35c-0.156-0.293-0.345-0.586-0.69-0.932
+                                                            c-0.346-0.346-0.639-0.533-0.932-0.691l0.35-1.623l0.47-0.469c0,0,0.883,0.018,1.881,1.016c0.997,0.996,1.016,1.881,1.016,1.881
+                                                            L5.68,17.217z"/>
+                                </svg>
+                                <span>수정</span>
+                            </button>
+                            <button v-if="$page.props.user.id == note.user_id" @click="showDelModal" class="m-2 text-white px-4 w-auto h-10 bg-gray-900 rounded-full hover:bg-gray-700 active:shadow-lg mouse shadow transition ease-in duration-200 focus:outline-none">
+                                <svg viewBox="0 0 20 20" enable-background="new 0 0 20 20" class="w-4 h-4 inline-block mr-1">
+                                    <path fill="#FFFFFF" d="M17.561,2.439c-1.442-1.443-2.525-1.227-2.525-1.227L8.984,7.264L2.21,14.037L1.2,18.799l4.763-1.01                                                        l6.774-6.771l6.052-6.052C18.788,4.966,19.005,3.883,17.561,2.439z M5.68,17.217l-1.624,0.35c-0.156-0.293-0.345-0.586-0.69-0.932
+                                                            c-0.346-0.346-0.639-0.533-0.932-0.691l0.35-1.623l0.47-0.469c0,0,0.883,0.018,1.881,1.016c0.997,0.996,1.016,1.881,1.016,1.881
+                                                            L5.68,17.217z"/>
+                                </svg>
+                                <span>삭제</span>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+        </template>
+        <template #content>
+            <section class="bg-white py-8">
+
+                <div class="container mx-auto flex items-center flex-wrap pt-4 pb-12">
+                    <div class="py-5">
+                        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+                                <table class="w-full">
+                                    <thead>
+                                        <tr>
+                                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100">단어</th>
+                                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100">의미</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="word in note.words" :key="word.id">
+                                            <th class="border-b-2 p-2">{{ word.language }}</th>
+                                            <th class="border-b-2 p-2">{{ word.mean }}</th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
         </template>
 
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                    <table class="w-full">
-                        <thead>
-                            <tr>
-                                <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100">단어</th>
-                                <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100">의미</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="word in note.words" :key="word.id">
-                                <th class="border-b-2 p-2">{{ word.language }}</th>
-                                <th class="border-b-2 p-2">{{ word.mean }}</th>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+    </new-layout>
         <jet-dialog-modal :show="createNote">
             <template #title>
                 <select class="float-right" v-model="pubpriv">
@@ -135,12 +157,11 @@
                 <!-- </div> -->
             </template>
         </jet-dialog-modal>
-    </app-layout>
 </template>
 
 <script>
     import { defineComponent } from 'vue'
-    import AppLayout from '@/Layouts/AppLayout.vue'
+    import NewLayout from '@/Layouts/NewLayout.vue'
     import JetDialogModal from '@/JetStream/DialogModal.vue'
     import {
         Link
@@ -149,7 +170,7 @@ import axios from 'axios'
     export default defineComponent({
         props : ['note'],
         components: {
-            AppLayout,
+            NewLayout,
             JetDialogModal,
             Link,
         },
