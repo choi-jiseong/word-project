@@ -1,5 +1,6 @@
 <template>
     <new-layout title="Dashboard">
+      <link href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css" rel="stylesheet">
         <template #header>
             <section class="bg-white py-8">
 
@@ -43,23 +44,15 @@
             <section class="bg-white py-8">
 
                 <div class="container mx-auto flex items-center flex-wrap pt-4 pb-12">
-                    <div class="py-5">
-                        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                                <table class="w-full">
-                                    <thead>
-                                        <tr>
-                                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100">단어</th>
-                                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100">의미</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="word in note.words" :key="word.id">
-                                            <th class="border-b-2 p-2">{{ word.language }}</th>
-                                            <th class="border-b-2 p-2">{{ word.mean }}</th>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                    <div class="w-full md:w-3/5 mx-auto p-8">
+                        <p>Open <strong>one</strong></p>
+                        <div class="shadow-md">
+                            <div v-for="word in note.words" :key="word" class="tab w-full overflow-hidden border-t">
+                            <input class="absolute opacity-0" :id="'tab-single-'+word.id" type="radio" name="tabs2">
+                            <label class="block p-5 leading-normal cursor-pointer" :for="'tab-single-'+word.id">{{ word.language }}</label>
+                            <div class="tab-content overflow-hidden border-l-2 bg-gray-100 border-indigo-500 leading-normal">
+                                <p class="p-5">{{ word.mean }}</p>
+                            </div>
                             </div>
                         </div>
                     </div>
@@ -312,3 +305,67 @@ import axios from 'axios'
         },
     })
 </script>
+      <style>
+         /* Tab content - closed */
+         .tab-content {
+         max-height: 0;
+         -webkit-transition: max-height .35s;
+         -o-transition: max-height .35s;
+         transition: max-height .35s;
+         }
+         /* :checked - resize to full height */
+         .tab input:checked ~ .tab-content {
+         max-height: 100vh;
+         }
+         /* Label formatting when open */
+         .tab input:checked + label{
+         /*@apply text-xl p-5 border-l-2 border-indigo-500 bg-gray-100 text-indigo*/
+         font-size: 1.25rem; /*.text-xl*/
+         padding: 1.25rem; /*.p-5*/
+         border-left-width: 2px; /*.border-l-2*/
+         border-color: #6574cd; /*.border-indigo*/
+         background-color: #f8fafc; /*.bg-gray-100 */
+         color: #6574cd; /*.text-indigo*/
+         }
+         /* Icon */
+         .tab label::after {
+         float:right;
+         right: 0;
+         top: 0;
+         display: block;
+         width: 1.5em;
+         height: 1.5em;
+         line-height: 1.5;
+         font-size: 1.25rem;
+         text-align: center;
+         -webkit-transition: all .35s;
+         -o-transition: all .35s;
+         transition: all .35s;
+         }
+         /* Icon formatting - closed */
+         .tab input[type=checkbox] + label::after {
+         content: "+";
+         font-weight:bold; /*.font-bold*/
+         border-width: 1px; /*.border*/
+         border-radius: 9999px; /*.rounded-full */
+         border-color: #b8c2cc; /*.border-grey*/
+         }
+         .tab input[type=radio] + label::after {
+         content: "\25BE";
+         font-weight:bold; /*.font-bold*/
+         border-width: 1px; /*.border*/
+         border-radius: 9999px; /*.rounded-full */
+         border-color: #b8c2cc; /*.border-grey*/
+         }
+         /* Icon formatting - open */
+         .tab input[type=checkbox]:checked + label::after {
+         transform: rotate(315deg);
+         background-color: #6574cd; /*.bg-indigo*/
+         color: #f8fafc; /*.text-grey-lightest*/
+         }
+         .tab input[type=radio]:checked + label::after {
+         transform: rotateX(180deg);
+         background-color: #6574cd; /*.bg-indigo*/
+         color: #f8fafc; /*.text-grey-lightest*/
+         }
+      </style>
