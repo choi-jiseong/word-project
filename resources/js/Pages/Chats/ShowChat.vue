@@ -17,9 +17,9 @@
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+                <div class="bg-white overflow-hidden">
                     <div class="py-10 px-2">
-                    <div class="max-w-md mx-auto bg-gray-100 shadow-lg rounded-lg overflow-hidden md:max-w-lg">
+                    <div class="w-full bg-white shadow-lg">
                         <div class="md:flex">
                             <div class="w-full p-4">
                                 <div class="card w-5/6 m-auto">

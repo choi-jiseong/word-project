@@ -17,15 +17,13 @@
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+                <div class="bg-white overflow-hidden sm:rounded-lg">
                     <div class="py-10 px-2">
-                        <div class="max-w-md mx-auto bg-gray-100 shadow-lg rounded-lg overflow-hidden md:max-w-lg">
+                        <div class="w-full mx-auto bg-white shadow-lg">
                             <div class="md:flex">
-
                                 <div class="w-full p-4">
-                                    Chat List
                                     <ul>
-                                        <li v-for="room in rooms" :key="room" class="flex justify-between items-center bg-white mt-2 p-2 hover:shadow-lg rounded cursor-pointer transition">
+                                        <li v-for="room in rooms" :key="room" class="flex justify-between items-center bg-gray-100 mt-2 p-2 hover:shadow-lg rounded cursor-pointer transition">
                                             <Link :href="'/chat/room/'+room.id" method="get">
                                             <div v-for="chatuser in room.chatuser" :key="chatuser">
                                                 <div class="flex ml-2" v-if="chatuser.id != $page.props.user.id">
