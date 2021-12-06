@@ -45,14 +45,13 @@
 
                 <div class="container mx-auto flex items-center flex-wrap pt-4 pb-12">
                     <div class="w-full md:w-3/5 mx-auto p-8">
-                        <p>Open <strong>one</strong></p>
                         <div class="shadow-md">
-                            <div v-for="word in note.words" :key="word" class="tab w-full overflow-hidden border-t">
-                            <input class="absolute opacity-0" :id="'tab-single-'+word.id" type="radio" name="tabs2">
-                            <label class="block p-5 leading-normal cursor-pointer" :for="'tab-single-'+word.id">{{ word.language }}</label>
-                            <div class="tab-content overflow-hidden border-l-2 bg-gray-100 border-indigo-500 leading-normal">
-                                <p class="p-5">{{ word.mean }}</p>
-                            </div>
+                            <div v-for="(word, index) in note.words" :key="word.id" class="tab w-full overflow-hidden border-t">
+                                <input class="absolute opacity-0" :id="'tab-single-'+index" type="radio" name="tabs2">
+                                <label class="block p-5 leading-normal cursor-pointer" :for="'tab-single-'+index">{{ word.language }}</label>
+                                <div class="tab-content overflow-hidden border-l-2 bg-gray-100 border-indigo-500 leading-normal">
+                                    <p class="p-5">{{ word.mean }}</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -190,6 +189,7 @@ import axios from 'axios'
             }
         },
         methods: {
+
             async getNote() {
                 await this.$inertia.get('/notes/show/'+this.note.id);
             },
@@ -302,7 +302,7 @@ import axios from 'axios'
                 console.log('delete');
                 this.$inertia.delete('/notes/delete/'+this.note.id);
             }
-        },
+        }
     })
 </script>
       <style>
@@ -342,14 +342,7 @@ import axios from 'axios'
          -o-transition: all .35s;
          transition: all .35s;
          }
-         /* Icon formatting - closed */
-         .tab input[type=checkbox] + label::after {
-         content: "+";
-         font-weight:bold; /*.font-bold*/
-         border-width: 1px; /*.border*/
-         border-radius: 9999px; /*.rounded-full */
-         border-color: #b8c2cc; /*.border-grey*/
-         }
+
          .tab input[type=radio] + label::after {
          content: "\25BE";
          font-weight:bold; /*.font-bold*/
@@ -357,12 +350,7 @@ import axios from 'axios'
          border-radius: 9999px; /*.rounded-full */
          border-color: #b8c2cc; /*.border-grey*/
          }
-         /* Icon formatting - open */
-         .tab input[type=checkbox]:checked + label::after {
-         transform: rotate(315deg);
-         background-color: #6574cd; /*.bg-indigo*/
-         color: #f8fafc; /*.text-grey-lightest*/
-         }
+
          .tab input[type=radio]:checked + label::after {
          transform: rotateX(180deg);
          background-color: #6574cd; /*.bg-indigo*/
