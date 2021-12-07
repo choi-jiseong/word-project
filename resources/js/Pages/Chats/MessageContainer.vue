@@ -16,26 +16,26 @@ export default {
     },
     data() {
         return {
-            // messages_data : this.messages.data,
+            messages_data : this.messages.data,
         }
     },
     methods: {
-        // scroll: function () {
-        //     const self = this;
-        //     window.onscroll = function(ev) {
-        //         // console.log(this.messages);
-        //         if(document.documentElement.scrollTop < 10) {
-        //             self.$inertia.visit(next.url, {
-        //                 preserveScroll : true,
-        //                 preserveState : true,
-        //             });
-        //             self.messages_data.push(...self.messages.data);
-        //         }
-        //     }
-        // }
+        scroll: function () {
+            const self = this;
+            window.onscroll = function(ev) {
+                // console.log(this.messages);
+                if(document.documentElement.scrollTop < 10) {
+                    self.$inertia.visit(next.url, {
+                        preserveScroll : true,
+                        preserveState : true,
+                    });
+                    self.messages_data.push(...self.messages.data);
+                }
+            }
+        }
     },
     mounted() {
-        // this.scroll();
+        this.scroll();
         // console.log(this.$page.props.messages)
     },
 

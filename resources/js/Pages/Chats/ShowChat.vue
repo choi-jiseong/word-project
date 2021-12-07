@@ -25,7 +25,35 @@
                                 <div class="card w-5/6 m-auto">
                                     <div class="card-header"></div>
                                     <div class="card-body">
-                                        <message-container :messages="this.messages" />
+                                        <div v-if="messages" class="p-2  flex flex-col-reverse overflow-scroll">
+
+                                            <div v-for="message in this.messages.data" :key="message.id">
+                                                <div>
+                                                    <div id="messages" class="flex flex-col space-y-4 p-3 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch">
+                                                        <div class="chat-message" v-if="message.user.id != $page.props.user.id">
+                                                                <div class="flex items-end">
+                                                                    <div class="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-2 items-start">
+                                                                    <div><span class="px-4 py-2 rounded-lg inline-block rounded-bl-none bg-gray-300 text-gray-600">
+                                                                        {{ message.user.name }} : {{ message.message }}
+                                                                        </span></div>
+                                                                    </div>
+                                                                    <img class="h-8 w-8 rounded-full object-cover" :src="message.user.profile_photo_url" :alt="message.user.name" />
+                                                                </div>
+                                                        </div>
+                                                        <div class="chat-message" v-if="message.user.id == $page.props.user.id">
+                                                                <div class="flex items-end justify-end">
+                                                                    <div class="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-1 items-end">
+                                                                    <div><span class="px-4 py-2 rounded-lg inline-block rounded-br-none bg-blue-600 text-white ">
+                                                                        {{ message.user.name }} :{{ message.message }}
+                                                                        </span></div>
+                                                                    </div>
+                                                                    <img class="h-8 w-8 rounded-full object-cover" :src="$page.props.user.profile_photo_url" :alt="$page.props.user.name" />
+                                                                </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="card-footer">
                                         <div class="border-t-2 border-gray-200 px-4 pt-4 mb-2 sm:mb-0">
@@ -67,12 +95,12 @@
     import { defineComponent } from 'vue'
     import NewLayout from '@/Layouts/NewLayout.vue'
     import MessageContainer from './MessageContainer.vue'
-
+    import { debounce } from 'lodash'
     export default defineComponent({
         props : ['roomId'],
     components : {
         MessageContainer,
-        NewLayout
+        NewLayout,
     },
     data() {
         return {
@@ -81,6 +109,7 @@
                 room_id : this.roomId,
             },
             messages : null,
+            messages_data : null,
         }
     },
     methods: {
@@ -98,13 +127,27 @@
         disconnect(roomId) {
             window.Echo.leave('chat.'+roomId);
         },
-        getMessages() {
-            axios.get('/chat/room/'+this.roomId+'/messages')
+        async getMessages() {
+            await axios.get('/chat/room/'+this.roomId+'/messages')
             .then(response => {
                 this.messages = response.data;
+                this.messages_data = this.messages.data;
                 // console.log(response.data);
             })
             .catch(error => {
+                console.log(error);
+            });
+        },
+        getMoreMessages() {
+            if(this.messages.current_page == this.messages.last_page) {
+                // alert('No more message')
+                return;
+            }
+            axios.get(this.messages.next_page_url).then(response => {
+                // this.messages = response.data;
+                // this.messages.data = [...this.messages.data, ...response.data.data]
+                this.messages = {...response.data, 'data' : [...this.messages.data, ...response.data.data]};
+            }).catch(error => {
                 console.log(error);
             });
         },
@@ -123,11 +166,22 @@
                 this.getMessages();
                 this.form.newMessage = '';
             })
-        },
+        }
     },
     created() {
         this.connect();
-    }
+    },
+    mounted() {
+        window.addEventListener('scroll', debounce((e) => {
+            // console.log('scroll')
+            // console.log("offsetHeight:"+document.documentElement.offsetHeight)
+            // console.log("scrollTop:"+document.documentElement.scrollTop)
+            // console.log("InnerHeight:"+window.innerHeight)
+            if(document.documentElement.scrollTop < 10) {
+                this.getMoreMessages();
+            }
+        }, 100));
+    },
     })
 </script>
 

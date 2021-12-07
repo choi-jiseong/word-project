@@ -1,42 +1,5 @@
 <template>
     <new-layout title="Dashboard">
-        <!-- <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                    <div class="text-right">
-                        <button @click="open_create_modal()" @close="createNote == false"
-                            class="m-5 text-white px-4 w-auto h-10 bg-red-600 rounded-full hover:bg-red-700 active:shadow-lg mouse shadow transition ease-in duration-200 focus:outline-none">
-                            <svg viewBox="0 0 20 20" enable-background="new 0 0 20 20"
-                                class="w-4 h-4 inline-block mr-1">
-                                <path fill="#FFFFFF" d="M17.561,2.439c-1.442-1.443-2.525-1.227-2.525-1.227L8.984,7.264L2.21,14.037L1.2,18.799l4.763-1.01                                                        l6.774-6.771l6.052-6.052C18.788,4.966,19.005,3.883,17.561,2.439z M5.68,17.217l-1.624,0.35c-0.156-0.293-0.345-0.586-0.69-0.932
-                                                        c-0.346-0.346-0.639-0.533-0.932-0.691l0.35-1.623l0.47-0.469c0,0,0.883,0.018,1.881,1.016c0.997,0.996,1.016,1.881,1.016,1.881
-                                                        L5.68,17.217z" />
-                            </svg>
-                            <span>Note</span>
-                        </button>
-                    </div>
-                    <div class="flex flex-wrap">
-                        <div v-for="note in notes.data" :key="note.id"
-                            class="bg-white text-base w-full rounded-lg shadow m-2 border border-3 border-black my-1 flex flex-col">
-                            <div class="p-2 flex flex-col text-right">
-                                <div class="flex justify-between">
-                                    <h3 class="text-xl overflow-ellipsis overflow-hidden">{{ note.title }}</h3>
-                                    <p class="my-1">{{ note.created_at }}</p>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-gray-500">{{ note.user.name }}</span>
-                                    <Link :href="'/notes/show/'+note.id" method="get"><button value="button"
-                                        class="hover:text-white hover:bg-green-400 bg-gray-800 text-gray-400 m-auto my-2 px-6 py-2 text-lg rounded shadow-px-4 border-0">click</button>
-                                    </Link>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                    <input-link :links="notes.links" />
-                </div>
-            </div>
-        </div> -->
     <template #content>
     <section class="bg-white py-8">
 
@@ -60,20 +23,6 @@
                             <span>Note</span>
                         </button>
                     </div>
-
-                            <!-- <div class="flex items-center" id="store-nav-content">
-                                <a class="pl-3 inline-block no-underline hover:text-black" href="#">
-                                    <svg class="fill-current hover:text-black" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                                        <path d="M7 11H17V13H7zM4 7H20V9H4zM10 15H14V17H10z" />
-                                    </svg>
-                                </a>
-
-                                <a class="pl-3 inline-block no-underline hover:text-black" href="#">
-                                    <svg class="fill-current hover:text-black" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                                        <path d="M10,18c1.846,0,3.543-0.635,4.897-1.688l4.396,4.396l1.414-1.414l-4.396-4.396C17.365,13.543,18,11.846,18,10 c0-4.411-3.589-8-8-8s-8,3.589-8,8S5.589,18,10,18z M10,4c3.309,0,6,2.691,6,6s-2.691,6-6,6s-6-2.691-6-6S6.691,4,10,4z" />
-                                    </svg>
-                                </a>
-                            </div> -->
                 </div>
             </nav>
 
