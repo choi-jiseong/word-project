@@ -60,7 +60,7 @@
 
             </template>
             <template #content>
-                <table class="w-full mb-3">
+                <table class="w-full mb-3 shadow-2xl">
                     <thead>
                         <tr>
                             <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100">단어</th>

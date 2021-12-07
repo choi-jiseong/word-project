@@ -25,16 +25,16 @@
                                 <div class="card w-5/6 m-auto">
                                     <div class="card-header"></div>
                                     <div class="card-body">
-                                        <div v-if="messages" class="p-2  flex flex-col-reverse overflow-scroll">
-
+                                        <div v-if="messages" id="scrollcontainer" class="p-2 flex flex-col-reverse overflow-scroll h-80">
+                                            <div>
                                             <div v-for="message in this.messages.data" :key="message.id">
                                                 <div>
                                                     <div id="messages" class="flex flex-col space-y-4 p-3 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch">
                                                         <div class="chat-message" v-if="message.user.id != $page.props.user.id">
                                                                 <div class="flex items-end">
                                                                     <div class="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-2 items-start">
-                                                                    <div><span class="px-4 py-2 rounded-lg inline-block rounded-bl-none bg-gray-300 text-gray-600">
-                                                                        {{ message.user.name }} : {{ message.message }}
+                                                                        <div><span class="px-4 py-2 rounded-lg inline-block rounded-bl-none bg-gray-300 text-gray-600">
+                                                                            {{ message.user.name }} : {{ message.message }}
                                                                         </span></div>
                                                                     </div>
                                                                     <img class="h-8 w-8 rounded-full object-cover" :src="message.user.profile_photo_url" :alt="message.user.name" />
@@ -42,16 +42,17 @@
                                                         </div>
                                                         <div class="chat-message" v-if="message.user.id == $page.props.user.id">
                                                                 <div class="flex items-end justify-end">
+                                                                    <img class="h-8 w-8 rounded-full object-cover" :src="$page.props.user.profile_photo_url" :alt="$page.props.user.name" />
                                                                     <div class="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-1 items-end">
-                                                                    <div><span class="px-4 py-2 rounded-lg inline-block rounded-br-none bg-blue-600 text-white ">
-                                                                        {{ message.user.name }} :{{ message.message }}
+                                                                        <div><span class="px-4 py-2 rounded-lg inline-block rounded-br-none bg-blue-600 text-white ">
+                                                                            {{ message.user.name }} :{{ message.message }}
                                                                         </span></div>
                                                                     </div>
-                                                                    <img class="h-8 w-8 rounded-full object-cover" :src="$page.props.user.profile_photo_url" :alt="$page.props.user.name" />
                                                                 </div>
                                                         </div>
                                                     </div>
                                                 </div>
+                                            </div>
                                             </div>
                                         </div>
                                     </div>
@@ -132,7 +133,7 @@
             .then(response => {
                 this.messages = response.data;
                 this.messages_data = this.messages.data;
-                // console.log(response.data);
+                // console.log(response.data.data);
             })
             .catch(error => {
                 console.log(error);
@@ -162,8 +163,9 @@
                 message : this.form.newMessage
             })
             .then(response => {
-                // console.log(response.data);
+                console.log(response.data);
                 this.getMessages();
+                // this.messages = {...response.data, 'data' : [...this.messages.data, ...response.data.data]};
                 this.form.newMessage = '';
             })
         }
@@ -172,12 +174,14 @@
         this.connect();
     },
     mounted() {
-        window.addEventListener('scroll', debounce((e) => {
+        // var t = document.getElementById('scrollcontainer');
+        window.addEventListener("scroll", debounce((e) => {
             // console.log('scroll')
             // console.log("offsetHeight:"+document.documentElement.offsetHeight)
             // console.log("scrollTop:"+document.documentElement.scrollTop)
             // console.log("InnerHeight:"+window.innerHeight)
-            if(document.documentElement.scrollTop < 10) {
+            console.log(document.querySelector('#scrollcontainer').scrollTop)
+            if(document.querySelector('#scrollcontainer').scrollTop < 10) {
                 this.getMoreMessages();
             }
         }, 100));
