@@ -177,6 +177,12 @@ class WordNoteController extends Controller
         return Inertia::render('Notes/ShowNote', ['note' => $note->load('user')]);
     }
 
+    public function gameShow($id) {
+
+        $note = Note::find($id);
+        return Inertia::render('Notes/WordsGame', ['note' => $note]);
+    }
+
     /**
      * Show the form for editing the specified resource.
      *

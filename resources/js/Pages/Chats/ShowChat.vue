@@ -17,19 +17,19 @@
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden">
+                <div class="bg-white h-screen">
                     <div class="py-10 px-2">
-                    <div class="w-full bg-white shadow-lg">
+                    <div class="w-full bg-white shadow-xl">
                         <div class="md:flex">
                             <div class="w-full p-4">
                                 <div class="card w-5/6 m-auto">
                                     <div class="card-header"></div>
                                     <div class="card-body">
-                                        <div v-if="messages" id="scrollcontainer" class="p-2 flex flex-col-reverse overflow-scroll h-80">
+                                        <div v-if="messages" id="scrollcontainer" ref="me" class="p-2 flex flex-col-reverse overflow-y-scroll scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch h-80">
                                             <div>
                                             <div v-for="message in this.messages.data.reverse()" :key="message.id">
                                                 <div>
-                                                    <div id="messages" class="flex flex-col space-y-4 p-3 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch">
+                                                    <div id="messages" class="flex flex-col space-y-4 p-3 overflow-y-auto ">
                                                         <div class="chat-message" v-if="message.user.id != $page.props.user.id">
                                                                 <div class="flex items-end">
                                                                     <div class="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-2 items-start">
@@ -163,8 +163,10 @@
                 message : this.form.newMessage
             })
             .then(response => {
-                console.log(response.data);
+                // console.log(response.data);
+                // console.log(this.messages.data);
                 this.getMessages();
+                // this.messages.data.push(response.data.data);
                 // this.messages = {...response.data, 'data' : [...this.messages.data, ...response.data.data]};
                 this.form.newMessage = '';
             })
@@ -174,18 +176,43 @@
         this.connect();
     },
     mounted() {
+
         // var t = document.getElementById('scrollcontainer');
         window.addEventListener("scroll", debounce((e) => {
             // console.log('scroll')
             // console.log("offsetHeight:"+document.documentElement.offsetHeight)
             // console.log("scrollTop:"+document.documentElement.scrollTop)
             // console.log("InnerHeight:"+window.innerHeight)
-            console.log(document.querySelector('#scrollcontainer').scrollTop)
-            if(document.querySelector('#scrollcontainer').scrollTop < 10) {
+            console.log(document.documentElement.scrollTop)
+            if(document.documentElement.scrollTop < 10) {
                 this.getMoreMessages();
             }
         }, 100));
     },
     })
 </script>
+
+<style scoped>
+.scrollbar-w-2::-webkit-scrollbar {
+  width: 0.25rem;
+  height: 0.25rem;
+}
+
+.scrollbar-track-blue-lighter::-webkit-scrollbar-track {
+  --bg-opacity: 1;
+  background-color: #f7fafc;
+  background-color: rgba(247, 250, 252, var(--bg-opacity));
+}
+
+.scrollbar-thumb-blue::-webkit-scrollbar-thumb {
+  --bg-opacity: 1;
+  /* background-color: #edf2f7; */
+  /* background-color: rgba(237, 242, 247, var(--bg-opacity)); */
+  background-color: #a0aec0;
+}
+
+.scrollbar-thumb-rounded::-webkit-scrollbar-thumb {
+  border-radius: 0.25rem;
+}
+</style>
 

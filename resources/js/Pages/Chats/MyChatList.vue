@@ -47,7 +47,7 @@
                                 <table class="w-full">
                                     <tbody class="">
                                         <tr v-for="room in rooms" :key="room" class="relative transform scale-100
-                                                py-1 border-b-2 border-blue-100 cursor-default
+                                                py-1 border-b-2 border-blue-100 cursor-default hover:bg-blue-100
                                             ">
                                             <Link :href="'/chat/room/'+room.id" method="get">
                                                 <div v-for="chatuser in room.chatuser" :key="chatuser">
@@ -91,7 +91,7 @@
         },
     })
 </script>
-<style>
+<style scoped>
   #journal-scroll::-webkit-scrollbar {
             width: 4px;
             cursor: pointer;

@@ -44,6 +44,8 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/notes/store', [WordNoteC
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/notes/show/{noteId}', [WordNoteController::class, 'show'])->name('notes.show');
 
+Route::middleware(['auth:sanctum', 'verified'])->get('/notes/game/{noteId}', [WordNoteController::class, 'gameShow'])->name('notes.game');
+
 Route::middleware(['auth:sanctum', 'verified'])->post('/words/store', [WordNoteController::class, 'wordStore'])->name('words.store');
 
 Route::middleware(['auth:sanctum', 'verified'])->post('/words/newStore', [WordNoteController::class, 'wordNewStore'])->name('words.newStore');
