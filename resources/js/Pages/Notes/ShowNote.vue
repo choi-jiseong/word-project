@@ -96,12 +96,14 @@
                         <tr>
                             <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100">단어</th>
                             <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100">의미</th>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100"></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="i in wordsCount" :key="i">
                             <th><input type="text" @keydown.enter="searchMean(i-1)" v-model="form.languages[i-1]" class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"></th>
                             <th><input type="text" @keydown.enter="searchWord(i-1)" v-model="form.means[i-1]" class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"></th>
+                            <th><button @click="wordDelete(i)" class="material-icons-outlined pt-3 pb-2 text-red-500 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none border-gray-200">delete</button></th>
                         </tr>
                     </tbody>
                 </table>
@@ -223,6 +225,10 @@
             }
         },
         methods: {
+            wordDelete(i) {
+                this.form.languages[i-1] = '';
+                this.form.means[i-1] = '';
+            },
             changeLanguage() {
                 this.changeLangMean = true;
             },
