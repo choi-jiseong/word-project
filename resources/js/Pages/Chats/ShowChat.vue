@@ -1,5 +1,5 @@
 <template>
-    <new-layout title="Dashboard">
+    <new-layout title="Chat">
     <template #content>
     <section class="bg-white py-8">
 
@@ -31,14 +31,14 @@
                                                 <div>
                                                     <div id="messages" class="flex flex-col space-y-4 p-3 overflow-y-auto ">
                                                         <div class="chat-message" v-if="message.user.id != $page.props.user.id">
-                                                                <div class="flex items-end">
-                                                                    <div class="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-2 items-start">
-                                                                        <div><span class="px-4 py-2 rounded-lg inline-block rounded-bl-none bg-gray-300 text-gray-600">
-                                                                            {{ message.user.name }} : {{ message.message }}
-                                                                        </span></div>
-                                                                    </div>
-                                                                    <img class="h-8 w-8 rounded-full object-cover" :src="message.user.profile_photo_url" :alt="message.user.name" />
+                                                            <div class="flex items-end">
+                                                                <div class="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-2 items-start">
+                                                                    <div><span class="px-4 py-2 rounded-lg inline-block rounded-bl-none bg-gray-300 text-gray-600">
+                                                                        {{ message.user.name }} : {{ message.message }}
+                                                                    </span></div>
                                                                 </div>
+                                                                <img class="h-8 w-8 rounded-full object-cover" :src="message.user.profile_photo_url" :alt="message.user.name" />
+                                                            </div>
                                                         </div>
                                                         <div class="chat-message" v-if="message.user.id == $page.props.user.id">
                                                                 <div class="flex items-end justify-end">

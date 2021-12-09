@@ -1,7 +1,10 @@
 <template>
     <!-- <link href="https://unpkg.com/tailwindcss/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Work+Sans:200,400&display=swap" rel="stylesheet"> -->
-
+        <link
+            href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
+            rel="stylesheet"
+            />
     <new-layout title="Dashboard">
         <template #header>
             <div class="container mx-auto flex items-center flex-wrap pt-4 pb-12">
@@ -9,16 +12,21 @@
             <nav id="store" class="w-full z-30 top-0 px-6 py-1">
                 <div class="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 px-2 py-3">
 
-                    <a class="uppercase tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl " href="#">
-				WORD TEST
-			</a>
+                <a class="uppercase tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl " href="#">
+				    WORD TEST
+			    </a>
 
+              </div>
+              <div class="text-left mt-10">
+                    <Link :href="'/notes/show/'+note.id" method="get"><span class="material-icons-outlined hover:text-gray-300">
+                            exit_to_app
+                            </span></Link>
               </div>
             </nav>
             </div>
         </template>
     <template #content>
-        <section class="bg-white py-8" >
+        <section class="bg-white py-3" >
             <div class="container mx-auto flex items-center flex-wrap pt-4 pb-12">
                 <div class="w-full md:w-3/5 mx-auto p-8">
                     <Carousel>
@@ -51,7 +59,9 @@
     import NewLayout from '@/Layouts/NewLayout.vue'
     import 'vue3-carousel/dist/carousel.css';
     import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel';
-
+    import {
+        Link
+    } from '@inertiajs/inertia-vue3'
     export default defineComponent({
         props : ['note'],
         components: {
@@ -59,7 +69,8 @@
             Carousel,
             Slide,
             Pagination,
-            Navigation
+            Navigation,
+            Link
         },
         data() {
             return {
