@@ -27,7 +27,7 @@
                                     <div class="card-body">
                                         <div v-if="messages" id="scrollcontainer" ref="me" class="p-2 flex flex-col-reverse overflow-y-scroll scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch h-80">
                                             <div>
-                                            <div v-for="message in this.messages.data.reverse()" :key="message.id">
+                                            <div v-for="message in this.messages.data" :key="message.id">
                                                 <div>
                                                     <div id="messages" class="flex flex-col space-y-4 p-3 overflow-y-auto ">
                                                         <div class="chat-message" v-if="message.user.id != $page.props.user.id">
@@ -133,6 +133,7 @@
             .then(response => {
                 this.messages = response.data;
                 this.messages_data = this.messages.data;
+                this.messages.data = this.messages.data.reverse();
                 // console.log(response.data.data);
             })
             .catch(error => {
@@ -148,6 +149,7 @@
                 // this.messages = response.data;
                 // this.messages.data = [...this.messages.data, ...response.data.data]
                 this.messages = {...response.data, 'data' : [...this.messages.data.reverse(), ...response.data.data]};
+                this.messages.data = this.messages.data.reverse();
             }).catch(error => {
                 console.log(error);
             });

@@ -36,6 +36,7 @@
                                 <div class="mb-4"> {{ viewed_user.profile ? viewed_user.profile.title : 'no title' }}</div>
                                 <div class="mb-4"> {{ viewed_user.profile ? viewed_user.profile.description : 'no description' }}</div>
                             </div>
+                            <button @click="playChat(viewed_user.id)" class="border p-2 my-auto rounded-2xl">채팅하기</button>
                         </div>
                     </div>
                     <div class="tabs border-b-2 mb-3">
@@ -143,6 +144,9 @@ import { Inertia } from '@inertiajs/inertia'
             }
         },
         methods: {
+            playChat(userId) {
+            this.$inertia.post('/chat/room/create', {chatUserId : userId});
+            },
             onClickTab(tab) {
                 this.selectedTab = tab
             }
