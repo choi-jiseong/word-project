@@ -18,26 +18,6 @@
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden sm:rounded-lg">
-                    <!-- <div class="py-10 px-2">
-                        <div class="w-full mx-auto bg-white shadow-lg">
-                            <div class="md:flex">
-                                <div class="w-full p-4">
-                                    <ul>
-                                        <li v-for="room in rooms" :key="room" class="flex justify-between items-center bg-gray-100 mt-2 p-2 hover:shadow-lg rounded cursor-pointer transition">
-                                            <Link :href="'/chat/room/'+room.id" method="get">
-                                            <div v-for="chatuser in room.chatuser" :key="chatuser">
-                                                <div class="flex ml-2" v-if="chatuser.id != $page.props.user.id">
-                                                     <img :src="chatuser.profile_photo_url" width="40" height="40" class="rounded-full">
-                                                <div class="flex flex-col ml-2"> <span class="font-medium text-black">{{ chatuser.name }}</span> <span class="text-sm text-gray-400 truncate w-32"></span> </div>
-                                            </div>
-                                            </div>
-                                            </Link>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
                     <div class="container mx-auto py-5 flex justify-center h-screen">
                         <div class="w-4/5 h-60 flex flex-col shadow-xl">
                             <div class="bg-white text-sm text-gray-500 font-bold px-5 py-2 shadow border-b border-gray-300">
